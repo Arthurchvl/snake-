@@ -1,0 +1,440 @@
+\hypertarget{prog3_8c}{}\doxysection{Référence du fichier /home/etuinfo/archauvel/\+Documents/\+S1\+O1-\/séance2/prog3.c}
+\label{prog3_8c}\index{/home/etuinfo/archauvel/Documents/S1O1-\/séance2/prog3.c@{/home/etuinfo/archauvel/Documents/S1O1-\/séance2/prog3.c}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+Graphe des dépendances par inclusion de prog3.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=266pt]{prog3_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Structures de données}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structElem}{Elem}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{prog3_8c_af7a16e2716eaac90fb331c55876cf511}{TMAX}}~20
+\begin{DoxyCompactList}\small\item\em Taille maximale d’un tableau. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Définitions de type}
+\begin{DoxyCompactItemize}
+\item 
+typedef \mbox{\hyperlink{structelement}{element}} $\ast$ \mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}
+\begin{DoxyCompactList}\small\item\em Pointeur sur le premier élément d\textquotesingle{}une liste. \end{DoxyCompactList}\item 
+typedef struct \mbox{\hyperlink{structElem}{Elem}} \mbox{\hyperlink{prog3_8c_a7723f2788951eb31c803aa9e769c815a}{element}}
+\item 
+typedef char \mbox{\hyperlink{prog3_8c_ac54789037e519979252663f0f9a0e001}{typ\+Tab}}\mbox{[}\mbox{\hyperlink{prog3_8c_af7a16e2716eaac90fb331c55876cf511}{TMAX}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em Type tableau de TMAX caractères. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Fonctions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{prog3_8c_aedb6e87fd951f8f079b178e5d471d35c}{aff}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} ch)
+\begin{DoxyCompactList}\small\item\em Affiche une chaîne à l\textquotesingle{}écran. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prog3_8c_ac725748ae2edf66866e4800dfdbfc7a5}{ajQ}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$ch, char c)
+\begin{DoxyCompactList}\small\item\em Ajout d\textquotesingle{}un caractère en queue. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prog3_8c_a134a987544978ba50b241a2f954cc486}{ajT}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$ch, char c)
+\begin{DoxyCompactList}\small\item\em Ajout d\textquotesingle{}un caractère en tête. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{prog3_8c_a8a884d955ed833dbc1b30b0e955821e9}{ana}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} ch1, \mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} ch2)
+\begin{DoxyCompactList}\small\item\em Indique si deux chaînes sont anagrammes l\textquotesingle{}une de l\textquotesingle{}autre. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{prog3_8c_a8803ba5fdfa4068b44189d5b1daf23de}{app}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} ch, char c)
+\begin{DoxyCompactList}\small\item\em Indique si un caractère fait partie d\textquotesingle{}une chaîne. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prog3_8c_a90f409be6bdf72a2e88d0aa89a0d1172}{cat}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} ch1, \mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} ch2, \mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$ch3)
+\item 
+bool \mbox{\hyperlink{prog3_8c_a824e1f768a3979cf1a2017ca38b34328}{estV}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} ch)
+\begin{DoxyCompactList}\small\item\em Fonction qui indique si une chaine est vide. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{prog3_8c_aa22308fa54587f990800022d7746754c}{ide}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} ch1, \mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} ch2)
+\begin{DoxyCompactList}\small\item\em Indique si deux chaînes sont identiques. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prog3_8c_a9252cb123ddeefcae37c5db170b66b31}{init}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$ch)
+\begin{DoxyCompactList}\small\item\em Fonction qui initialise la chaine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prog3_8c_a02e14e0472d11e4d4915be166c216615}{inv}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} ch1, \mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$ch2)
+\begin{DoxyCompactList}\small\item\em Inverse l\textquotesingle{}ordre des caractères dans une chaîne. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{prog3_8c_ab3064eb23c5ed22dbb386d86d936eebf}{LvT}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} ch, \mbox{\hyperlink{prog3_8c_ac54789037e519979252663f0f9a0e001}{typ\+Tab}} t)
+\begin{DoxyCompactList}\small\item\em Recopie les caractères d\textquotesingle{}une chaîne dans un tableau. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{prog3_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
+\begin{DoxyCompactList}\small\item\em Programme principal. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{prog3_8c_acf4d2e568173b6d995e60a880ecca865}{nbC}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} ch)
+\begin{DoxyCompactList}\small\item\em Calcule la taille d\textquotesingle{}une chaîne. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prog3_8c_a750215b891c38b423fd3f99de7a2c9a8}{ord}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$ch)
+\begin{DoxyCompactList}\small\item\em Ordonne les caractères d\textquotesingle{}une chaîne par ordre croissant. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{prog3_8c_a612fab57c4b60ff19315fd1bd04d6790}{pal}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} ch1)
+\begin{DoxyCompactList}\small\item\em Indique si une chaîne est un palindrome. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{prog3_8c_a8ebd8a55b474f9eca409b7aeef7ac64e}{supprimer}} (\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$ch, char c)
+\begin{DoxyCompactList}\small\item\em Supprime un caractère d\textquotesingle{}une chaîne. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prog3_8c_a0cf2586ee20d622a377e6440b73e9e49}{trT}} (\mbox{\hyperlink{prog3_8c_ac54789037e519979252663f0f9a0e001}{typ\+Tab}} t, int N)
+\begin{DoxyCompactList}\small\item\em Trie les éléments d\textquotesingle{}un tableau de caractères. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{prog3_8c_a30b0007a427f154fe1b89e5c8add139d}{TvL}} (\mbox{\hyperlink{prog3_8c_ac54789037e519979252663f0f9a0e001}{typ\+Tab}} t, \mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$ch, int N)
+\begin{DoxyCompactList}\small\item\em Recopie les caractères d\textquotesingle{}une chaîne dans un tableau. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Documentation des macros}
+\mbox{\Hypertarget{prog3_8c_af7a16e2716eaac90fb331c55876cf511}\label{prog3_8c_af7a16e2716eaac90fb331c55876cf511}} 
+\index{prog3.c@{prog3.c}!TMAX@{TMAX}}
+\index{TMAX@{TMAX}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{TMAX}{TMAX}}
+{\footnotesize\ttfamily \#define TMAX~20}
+
+
+
+Taille maximale d’un tableau. 
+
+Taille maximale d\textquotesingle{}une chaine quand on souhaite ordonner ses caractères. 
+
+\doxysubsection{Documentation des définitions de type}
+\mbox{\Hypertarget{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}\label{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}} 
+\index{prog3.c@{prog3.c}!chaine@{chaine}}
+\index{chaine@{chaine}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{chaine}{chaine}}
+{\footnotesize\ttfamily \mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}}
+
+
+
+Pointeur sur le premier élément d\textquotesingle{}une liste. 
+
+Le type chaine permet de déclarer des chaines de caractères en tant que liste chaînée. \mbox{\Hypertarget{prog3_8c_a7723f2788951eb31c803aa9e769c815a}\label{prog3_8c_a7723f2788951eb31c803aa9e769c815a}} 
+\index{prog3.c@{prog3.c}!element@{element}}
+\index{element@{element}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{element}{element}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structElem}{Elem}} \mbox{\hyperlink{structelement}{element}}}
+
+\mbox{\Hypertarget{prog3_8c_ac54789037e519979252663f0f9a0e001}\label{prog3_8c_ac54789037e519979252663f0f9a0e001}} 
+\index{prog3.c@{prog3.c}!typTab@{typTab}}
+\index{typTab@{typTab}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{typTab}{typTab}}
+{\footnotesize\ttfamily typ\+Tab}
+
+
+
+Type tableau de TMAX caractères. 
+
+Le type typ\+Tab permet d\textquotesingle{}utiliser un tableau de stockage provisoire pour ordonner les éléments (caractères) d’une liste (voir fonction \mbox{\hyperlink{prog3_8c_a750215b891c38b423fd3f99de7a2c9a8}{ord()}}). 
+
+\doxysubsection{Documentation des fonctions}
+\mbox{\Hypertarget{prog3_8c_aedb6e87fd951f8f079b178e5d471d35c}\label{prog3_8c_aedb6e87fd951f8f079b178e5d471d35c}} 
+\index{prog3.c@{prog3.c}!aff@{aff}}
+\index{aff@{aff}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{aff()}{aff()}}
+{\footnotesize\ttfamily void aff (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}}]{ch }\end{DoxyParamCaption})}
+
+
+
+Affiche une chaîne à l\textquotesingle{}écran. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em ch} & \+: paramètre d\textquotesingle{}entrée qui représente la chaine à afficher.\\
+\hline
+\end{DoxyParams}
+Parcours complet de la liste chaînée pour afficher chacun de ses éléments (le champ \textquotesingle{}lettre\textquotesingle{}). \mbox{\Hypertarget{prog3_8c_ac725748ae2edf66866e4800dfdbfc7a5}\label{prog3_8c_ac725748ae2edf66866e4800dfdbfc7a5}} 
+\index{prog3.c@{prog3.c}!ajQ@{ajQ}}
+\index{ajQ@{ajQ}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{ajQ()}{ajQ()}}
+{\footnotesize\ttfamily void ajQ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$}]{ch,  }\item[{char}]{c }\end{DoxyParamCaption})}
+
+
+
+Ajout d\textquotesingle{}un caractère en queue. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em ch} & \+: paramètre d\textquotesingle{}entrée/sortie qui représente la chaine à modifier. \\
+\hline
+{\em c} & paramètre d\textquotesingle{}entrée qui représente le caractère à ajouter.\\
+\hline
+\end{DoxyParams}
+Après une allocation dynamique, ajoute le nouvel élément à la fin de la liste chaînée. \mbox{\Hypertarget{prog3_8c_a134a987544978ba50b241a2f954cc486}\label{prog3_8c_a134a987544978ba50b241a2f954cc486}} 
+\index{prog3.c@{prog3.c}!ajT@{ajT}}
+\index{ajT@{ajT}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{ajT()}{ajT()}}
+{\footnotesize\ttfamily void ajT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$}]{ch,  }\item[{char}]{c }\end{DoxyParamCaption})}
+
+
+
+Ajout d\textquotesingle{}un caractère en tête. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em ch} & \+: paramètre d\textquotesingle{}entrée/sortie qui représente la chaine à modifier. \\
+\hline
+{\em c} & paramètre d\textquotesingle{}entrée qui représente le caractère à ajouter.\\
+\hline
+\end{DoxyParams}
+Après une allocation dynamique, ajoute le nouvel élément au début de la liste chaînée. \mbox{\Hypertarget{prog3_8c_a8a884d955ed833dbc1b30b0e955821e9}\label{prog3_8c_a8a884d955ed833dbc1b30b0e955821e9}} 
+\index{prog3.c@{prog3.c}!ana@{ana}}
+\index{ana@{ana}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{ana()}{ana()}}
+{\footnotesize\ttfamily bool ana (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}}]{ch1,  }\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}}]{ch2 }\end{DoxyParamCaption})}
+
+
+
+Indique si deux chaînes sont anagrammes l\textquotesingle{}une de l\textquotesingle{}autre. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em ch1} & \+: paramètre d\textquotesingle{}entrée qui représente la première chaîne. \\
+\hline
+{\em ch2} & \+: paramètre d\textquotesingle{}entrée qui représente le deuxième chaîne. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+true si les deux chaînes sont anagrammes l\textquotesingle{}une de l\textquotesingle{}autre, false sinon.
+\end{DoxyReturn}
+La fonction teste si les deux chaînes sont composées des mêmes caractères. Elle parcourt la liste ch1. A chaque element, elle enlève dans ch2 le caractère courant correspondant $\ast$ de ch1 s\textquotesingle{}il existe. S\textquotesingle{}il n\textquotesingle{}existe pas, le résultat est faux, arrêt du parcours. Mais si à la fin du parcours $\ast$ de ch1, ch2 est vide alors c\textquotesingle{}est OK.
+
+ATTENTION, dans cette fonction la chaine ch2 est modifiée, donc plus utilisable à la fin. \mbox{\Hypertarget{prog3_8c_a8803ba5fdfa4068b44189d5b1daf23de}\label{prog3_8c_a8803ba5fdfa4068b44189d5b1daf23de}} 
+\index{prog3.c@{prog3.c}!app@{app}}
+\index{app@{app}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{app()}{app()}}
+{\footnotesize\ttfamily bool app (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}}]{ch,  }\item[{char}]{c }\end{DoxyParamCaption})}
+
+
+
+Indique si un caractère fait partie d\textquotesingle{}une chaîne. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em ch} & \+: paramètre d\textquotesingle{}entrée qui représente la chaîne à tester. \\
+\hline
+{\em c} & \+: paramètre d\textquotesingle{}entrée qui représente le caractère à tester. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+true si le caractère est présent dans la chaîne, false sinon.
+\end{DoxyReturn}
+Effectue une recherche séquentielle de c dans la liste chaînée ch. \mbox{\Hypertarget{prog3_8c_a90f409be6bdf72a2e88d0aa89a0d1172}\label{prog3_8c_a90f409be6bdf72a2e88d0aa89a0d1172}} 
+\index{prog3.c@{prog3.c}!cat@{cat}}
+\index{cat@{cat}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{cat()}{cat()}}
+{\footnotesize\ttfamily void cat (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}}]{ch1,  }\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}}]{ch2,  }\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$}]{ch3 }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{prog3_8c_a824e1f768a3979cf1a2017ca38b34328}\label{prog3_8c_a824e1f768a3979cf1a2017ca38b34328}} 
+\index{prog3.c@{prog3.c}!estV@{estV}}
+\index{estV@{estV}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{estV()}{estV()}}
+{\footnotesize\ttfamily bool estV (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}}]{ch }\end{DoxyParamCaption})}
+
+
+
+Fonction qui indique si une chaine est vide. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em ch} & \+: paramètre d\textquotesingle{}entrée qui représente la chaine à tester. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+true si la chaine est vide, false sinon. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{prog3_8c_aa22308fa54587f990800022d7746754c}\label{prog3_8c_aa22308fa54587f990800022d7746754c}} 
+\index{prog3.c@{prog3.c}!ide@{ide}}
+\index{ide@{ide}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{ide()}{ide()}}
+{\footnotesize\ttfamily bool ide (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}}]{ch1,  }\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}}]{ch2 }\end{DoxyParamCaption})}
+
+
+
+Indique si deux chaînes sont identiques. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em ch1} & \+: paramètre d\textquotesingle{}entrée qui représente la première chaîne. \\
+\hline
+{\em ch2} & \+: paramètre d\textquotesingle{}entrée qui représente la deuxième chaîne. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+true si les deux chaînes sont identiques, false sinon.
+\end{DoxyReturn}
+Parcourt parallèlement les deux listes chaînées, caractère par caractère, tant que les caractères correspondants sont les mêmes. \mbox{\Hypertarget{prog3_8c_a9252cb123ddeefcae37c5db170b66b31}\label{prog3_8c_a9252cb123ddeefcae37c5db170b66b31}} 
+\index{prog3.c@{prog3.c}!init@{init}}
+\index{init@{init}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily void init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$}]{ch }\end{DoxyParamCaption})}
+
+
+
+Fonction qui initialise la chaine. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em ch} & \+: paramètre de sortie qui représente la chaine à initialiser.\\
+\hline
+\end{DoxyParams}
+Met à NULL la chaine passée en paramètre. Cette fonction permet d\textquotesingle{}initialiser une chaîne. Elle doit être appelée à chaque utilisation de chaîne.\mbox{\Hypertarget{prog3_8c_a02e14e0472d11e4d4915be166c216615}\label{prog3_8c_a02e14e0472d11e4d4915be166c216615}} 
+\index{prog3.c@{prog3.c}!inv@{inv}}
+\index{inv@{inv}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{inv()}{inv()}}
+{\footnotesize\ttfamily void inv (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}}]{ch1,  }\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$}]{ch2 }\end{DoxyParamCaption})}
+
+
+
+Inverse l\textquotesingle{}ordre des caractères dans une chaîne. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em ch1} & \+: paramètre d\textquotesingle{}entrée qui représente la chaîne à inverser. \\
+\hline
+{\em ch2} & \+: paramètre de sortie qui représente la nouvelle chaîne construite.\\
+\hline
+\end{DoxyParams}
+Parcourt la première liste et ajoute chaque élément en tête de la deuxième. ATTENTION \+: ch2 doit être initialisée par la procédure/fonction appelante. \mbox{\Hypertarget{prog3_8c_ab3064eb23c5ed22dbb386d86d936eebf}\label{prog3_8c_ab3064eb23c5ed22dbb386d86d936eebf}} 
+\index{prog3.c@{prog3.c}!LvT@{LvT}}
+\index{LvT@{LvT}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{LvT()}{LvT()}}
+{\footnotesize\ttfamily int LvT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}}]{ch,  }\item[{\mbox{\hyperlink{prog3_8c_ac54789037e519979252663f0f9a0e001}{typ\+Tab}}}]{t }\end{DoxyParamCaption})}
+
+
+
+Recopie les caractères d\textquotesingle{}une chaîne dans un tableau. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em ch} & \+: paramètre d\textquotesingle{}entrée qui représente la chaîne à copier. \\
+\hline
+{\em t} & \+: paramètre d\textquotesingle{}entrée/sortie qui représente le tableau. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+La taille de la chaîne ou -\/1 si cette taille dépasse TMAX. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{Voir également}
+\mbox{\hyperlink{prog3_8c_a750215b891c38b423fd3f99de7a2c9a8}{ord()}}
+\end{DoxySeeAlso}
+La fonction est utilisée par la fonction \mbox{\hyperlink{prog3_8c_a750215b891c38b423fd3f99de7a2c9a8}{ord()}}. Elle copie les caractères d\textquotesingle{}une Liste dans un tableau A CONDITION que la taille de la chaîne soit inférieure ou égale à TMAX. \mbox{\Hypertarget{prog3_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{prog3_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}} 
+\index{prog3.c@{prog3.c}!main@{main}}
+\index{main@{main}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Programme principal. 
+
+\begin{DoxyReturn}{Renvoie}
+Code de sortie du programme (0 \+: sortie normale).
+\end{DoxyReturn}
+Le programme principal traite un exemple qui teste quelques fonctions \+: il crée deux chaines, les affiche, puis ordonne la deuxième et l\textquotesingle{}affiche. \mbox{\Hypertarget{prog3_8c_acf4d2e568173b6d995e60a880ecca865}\label{prog3_8c_acf4d2e568173b6d995e60a880ecca865}} 
+\index{prog3.c@{prog3.c}!nbC@{nbC}}
+\index{nbC@{nbC}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{nbC()}{nbC()}}
+{\footnotesize\ttfamily int nbC (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}}]{ch }\end{DoxyParamCaption})}
+
+
+
+Calcule la taille d\textquotesingle{}une chaîne. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em ch} & \+: paramètre d\textquotesingle{}entrée qui représente la chaine dont on veut connaître la taille. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+le nombre de caractères présents dans la chaîne.
+\end{DoxyReturn}
+Parcours complet de la liste chaînée pour compter le nombre de ses éléments. \mbox{\Hypertarget{prog3_8c_a750215b891c38b423fd3f99de7a2c9a8}\label{prog3_8c_a750215b891c38b423fd3f99de7a2c9a8}} 
+\index{prog3.c@{prog3.c}!ord@{ord}}
+\index{ord@{ord}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{ord()}{ord()}}
+{\footnotesize\ttfamily void ord (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$}]{ch }\end{DoxyParamCaption})}
+
+
+
+Ordonne les caractères d\textquotesingle{}une chaîne par ordre croissant. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em t} & \+: paramètre d\textquotesingle{}entrée/sortie qui représente la chaîne à ordonner.\\
+\hline
+\end{DoxyParams}
+La fonction utilise les fonctions LvT, trT et TvL pour respectivement \+:
+\begin{DoxyItemize}
+\item copier les caractères de la liste dans un tableau,
+\item trier le tableau,
+\item et recopier les caractères du tableau dans la liste.
+\end{DoxyItemize}
+
+ATTENTION \+: la chaine doit faire moins de TMAX caractères. \mbox{\Hypertarget{prog3_8c_a612fab57c4b60ff19315fd1bd04d6790}\label{prog3_8c_a612fab57c4b60ff19315fd1bd04d6790}} 
+\index{prog3.c@{prog3.c}!pal@{pal}}
+\index{pal@{pal}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{pal()}{pal()}}
+{\footnotesize\ttfamily bool pal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}}}]{ch1 }\end{DoxyParamCaption})}
+
+
+
+Indique si une chaîne est un palindrome. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em ch1} & \+: paramètre d\textquotesingle{}entrée qui représente la chaîne à tester. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+true si les deux chaînes sont identiques, false sinon.
+\end{DoxyReturn}
+Une chaîne est un palindrome si elle est identique à son inverse. \mbox{\Hypertarget{prog3_8c_a8ebd8a55b474f9eca409b7aeef7ac64e}\label{prog3_8c_a8ebd8a55b474f9eca409b7aeef7ac64e}} 
+\index{prog3.c@{prog3.c}!supprimer@{supprimer}}
+\index{supprimer@{supprimer}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{supprimer()}{supprimer()}}
+{\footnotesize\ttfamily bool supprimer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$}]{ch,  }\item[{char}]{c }\end{DoxyParamCaption})}
+
+
+
+Supprime un caractère d\textquotesingle{}une chaîne. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em ch} & \+: paramètre d\textquotesingle{}entrée/sortie qui représente la chaîne à modifier. \\
+\hline
+{\em c} & \+: paramètre d\textquotesingle{}entrée qui représente le caractère à enlever. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+true si la suppression a eu lieu (ie si le caractère est présent), false sinon.
+\end{DoxyReturn}
+ATTENTION \+: cette fonction ne supprime que la première occurrence du caractère. \mbox{\Hypertarget{prog3_8c_a0cf2586ee20d622a377e6440b73e9e49}\label{prog3_8c_a0cf2586ee20d622a377e6440b73e9e49}} 
+\index{prog3.c@{prog3.c}!trT@{trT}}
+\index{trT@{trT}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{trT()}{trT()}}
+{\footnotesize\ttfamily void trT (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_ac54789037e519979252663f0f9a0e001}{typ\+Tab}}}]{t,  }\item[{int}]{N }\end{DoxyParamCaption})}
+
+
+
+Trie les éléments d\textquotesingle{}un tableau de caractères. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em t} & \+: paramètre d\textquotesingle{}entrée/sortie qui représente le tableau à trier. \\
+\hline
+{\em N} & paramètre d\textquotesingle{}entrée qui représente le nombre de caractères du tableau. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{Voir également}
+\mbox{\hyperlink{prog3_8c_a750215b891c38b423fd3f99de7a2c9a8}{ord()}}
+\end{DoxySeeAlso}
+La fonction utilise le tri par insertion. Elle ordonne les éléments de manière croissante. \mbox{\Hypertarget{prog3_8c_a30b0007a427f154fe1b89e5c8add139d}\label{prog3_8c_a30b0007a427f154fe1b89e5c8add139d}} 
+\index{prog3.c@{prog3.c}!TvL@{TvL}}
+\index{TvL@{TvL}!prog3.c@{prog3.c}}
+\doxysubsubsection{\texorpdfstring{TvL()}{TvL()}}
+{\footnotesize\ttfamily void TvL (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{prog3_8c_ac54789037e519979252663f0f9a0e001}{typ\+Tab}}}]{t,  }\item[{\mbox{\hyperlink{prog3_8c_a2943d70e0402b8b90395897ae3e156bd}{chaine}} $\ast$}]{ch,  }\item[{int}]{N }\end{DoxyParamCaption})}
+
+
+
+Recopie les caractères d\textquotesingle{}une chaîne dans un tableau. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em t} & \+: paramètre d\textquotesingle{}entrée/sortie qui représente le tableau à recopier. \\
+\hline
+{\em ch} & \+: paramètre de sortie qui représente la chaîne résultat. \\
+\hline
+{\em N} & paramètre d\textquotesingle{}entrée qui représente le nombre de caractères à recopier. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{Voir également}
+\mbox{\hyperlink{prog3_8c_a750215b891c38b423fd3f99de7a2c9a8}{ord()}}
+\end{DoxySeeAlso}
+La fonction est utilisée par la fonction \mbox{\hyperlink{prog3_8c_a750215b891c38b423fd3f99de7a2c9a8}{ord()}}. Elle ajoute un à un les caractères du tableau à une liste (ajout en queue). ATTENTION \+: ch doit être initialisée par la procédure/fonction appelante. 
