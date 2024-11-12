@@ -2,8 +2,13 @@
 * @file version3.c
 * @brief code de la version 3 du projet de SAE1.01, un jeu snake
 * @author Arthur CHAUVEL
-* @version 3.1.3
+* @version 3.1.4
 * @date 11/11/24
+* troisième version du programme du snake permettant d'afficher les bordures ainsi que des "pavés" au niveau de la zone de jeu,
+*
+* les colisions sont maintenant prises en compte, ainsi une collision de la tete du serpent avec sa queue, la bordure ou un pavé
+*
+* arretera le jeu. Le jeu peut toujours etre arreté avec 'a' et le serpent se déplace initialement vers la droite  jusqu'a appui sur une touche directionnelle.
 */
 
 /*
@@ -265,6 +270,8 @@ void dessinerSerpent(int lesX[], int lesY[])
  * @param lesX[] : Tableau contenant les positions X de chaque segment du serpent.
  * @param lesY[] : Tableau contenant les positions Y de chaque segment du serpent.
  * @param direction : Caractère indiquant la direction de déplacement (HAUT, DROITE, BAS, GAUCHE).
+ * @param plateau : type chaine de caractère permet d'afficher le plateau au niveau des bordures.
+ * @param collision : Booléen qui indique l'état du jeu en fonction de si il y a eu collision ou non.
  */
 void progresser(int lesX[], int lesY[], char direction, char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU], bool *collision) {
     *collision = false; // Initialiser à "pas de collision"
@@ -323,8 +330,7 @@ void initPlateau(char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU]) {
 }
 
 void dessinerPlateau(char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU]) {
-    // Effacer l'écran
-    printf("\033[H\033[J");
+    system("clear");
 
     for (int i = 0; i < LONGUEUR_PLATEAU; i++) {
         for (int j = 0; j < LARGEUR_PLATEAU; j++) {

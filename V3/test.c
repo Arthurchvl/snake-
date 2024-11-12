@@ -257,7 +257,6 @@ void dessinerSerpent(int lesX[], int lesY[])
         }
     }
 }
-
 /**
  * @brief Cette fonction met à jour la position du serpent en fonction de la direction donnée,
  * puis dessine le serpent à sa nouvelle position.
@@ -265,6 +264,8 @@ void dessinerSerpent(int lesX[], int lesY[])
  * @param lesX[] : Tableau contenant les positions X de chaque segment du serpent.
  * @param lesY[] : Tableau contenant les positions Y de chaque segment du serpent.
  * @param direction : Caractère indiquant la direction de déplacement (HAUT, DROITE, BAS, GAUCHE).
+ * @param plateau : type chaîne de caractères permettant d'afficher le plateau au niveau des bordures.
+ * @param collision : Booléen qui indique l'état du jeu en fonction de si une collision est survenue.
  */
 void progresser(int lesX[], int lesY[], char direction, char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU], bool *collision) {
     *collision = false; // Initialiser à "pas de collision"
@@ -286,37 +287,30 @@ void progresser(int lesX[], int lesY[], char direction, char plateau[LONGUEUR_PL
         lesX[0]--;
     }
 
-    //gestion des collisions
+    // Gestion des collisions avec les bords du plateau
     if (lesX[0] <= 0 || lesX[0] >= LARGEUR_PLATEAU - 1 || lesY[0] <= 0 || lesY[0] >= LONGUEUR_PLATEAU - 1) {
         *collision = true;
+        system("clear");
         return;
     }
 
+    // Collision avec le corps du serpent
     for (int i = 1; i < TAILLE_SERPENT; i++) {
         if (lesX[0] == lesX[i] && lesY[0] == lesY[i]) {
             *collision = true;
+            system("clear");
             return;
         }
     }
 
+    // Collision avec les pavés ou la bordure sur le plateau
     if (plateau[lesY[0]][lesX[0]] == CAR_BORDURE) {
         *collision = true;
+        system("clear");
         return;
     }
 
     dessinerSerpent(lesX, lesY);
-}
-
-void initPlateau(char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU]) {
-    for (int i = 0; i < LONGUEUR_PLATEAU; i++) {
-        for (int j = 0; j < LARGEUR_PLATEAU; j++) {
-            if (i == 0 || i == LONGUEUR_PLATEAU - 1 || j == 0 || j == LARGEUR_PLATEAU - 1) {
-                plateau[i][j] = CAR_BORDURE;
-            } else {
-                plateau[i][j] = VIDE;
-            }
-        }
-    }
 }
 
 void dessinerPlateau(char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU]) {
