@@ -2,7 +2,7 @@
 * @file version3.c
 * @brief code de la version 3 du projet de SAE1.01, un jeu snake
 * @author Arthur CHAUVEL
-* @version 3.1.4
+* @version 3.2.2
 * @date 11/11/24
 * troisième version du programme du snake permettant d'afficher les bordures ainsi que des "pavés" au niveau de la zone de jeu,
 *
@@ -62,7 +62,10 @@ void dessinerSerpent(int lesX[], int lesY[]);
 void progresser(int lesX[], int lesY[], char direction, char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU], bool *collision);
 void initPlateau(char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU]);
 void dessinerPlateau(char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU]);
-void placerPaves(char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU]);
+void placerPaves(char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU], int lesX[], int lesY[]);
+bool estZoneLibreDuSerpent(int x, int y, int paveTaille, int lesX[], int lesY[]);
+bool estZoneValidePourPave(int x, int y, int paveTaille);
+
 
 /*
 * programme principal qui appelle toutes les fonctions du code 
@@ -87,7 +90,7 @@ int main()
 
     //initialisation du plateau avec pavés
     initPlateau(plateau);
-    placerPaves(plateau);
+    placerPaves(plateau, lesX, lesY);
     dessinerPlateau(plateau);
 
     while (verifArret == 1)
@@ -308,12 +311,18 @@ void progresser(int lesX[], int lesY[], char direction, char plateau[LONGUEUR_PL
         }
     }
 
-    if (plateau[lesY[0]][lesX[0]] == CAR_BORDURE) {
+    if (plateau[lesX[0]][lesY[0]] == CAR_BORDURE)
+    {
         *collision = true;
-        system("clear");
-        return;
     }
-
+    // SERPENT
+    for (int i = 1; i < TAILLE_SERPENT; i++)
+    {
+        if ((lesX[0] == lesX[i]) && (lesY[0] == lesY[i]))
+        {
+            *collision = true;
+        }
+    }
     dessinerSerpent(lesX, lesY);
 }
 
@@ -340,23 +349,59 @@ void dessinerPlateau(char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU]) {
     }
 }
 
-void placerPaves(char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU]) {
+bool estZoneLibreDuSerpent(int x, int y, int paveTaille, int lesX[], int lesY[]) {
+    for (int i = 0; i < TAILLE_SERPENT; i++) {
+        if (lesX[i] >= x && lesX[i] < x + paveTaille && lesY[i] >= y && lesY[i] < y + paveTaille) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool estZoneValidePourPave(int x, int y, int paveTaille) {
+    // Vérifie que le pavé est au moins à une case des bordures
+    return (x > 1 && x + paveTaille < LARGEUR_PLATEAU - 1 &&
+            y > 1 && y + paveTaille < LONGUEUR_PLATEAU - 1);
+}
+
+void initPaves(char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU]) {
+    // Initialisation de la position du pavé
+    int x = rand();
+    x = x % (LARGEUR_PLATEAU - TAILLE_PAVE - 3) + 2;
+    // Initialisation de la position en Y
+    int y = rand();
+    y = y % (LONGUEUR_PLATEAU - TAILLE_PAVE - 3) + 2;
+
+    // Placer le pavé dans le tableau plateau
+    for (int i = y; i < TAILLE_PAVE + y; i++) {
+        for (int j = x; j < TAILLE_PAVE + x; j++) {
+            plateau[i][j] = CAR_BORDURE;  // Placer le pavé dans le tableau à la position correcte
+        }
+    }
+}
+
+void placerPaves(char plateau[LONGUEUR_PLATEAU][LARGEUR_PLATEAU], int lesX[], int lesY[]) {
     int nombrePaves = NBRE_PAVES;
     int paveTaille = TAILLE_PAVE;
 
     // Initialiser le générateur de nombres aléatoires
     srand(time(NULL));
 
+    // Placer les pavés
     for (int p = 0; p < nombrePaves; p++) {
         int x, y;
 
-        // Positionner les pavés dans le cadre, en évitant les bordures
+        // Trouver une position valide pour le pavé
         do {
-            x = rand() % (LARGEUR_PLATEAU - 2 * paveTaille) + paveTaille;
-            y = rand() % (LONGUEUR_PLATEAU - 2 * paveTaille) + paveTaille;
-        } while (plateau[y][x] == CAR_BORDURE);  // Répéter si emplacement incorrect
+            // Générer une position aléatoire pour le pavé
+            x = rand() % (LARGEUR_PLATEAU - 2 * paveTaille) + 1; // éviter les bords
+            y = rand() % (LONGUEUR_PLATEAU - 2 * paveTaille) + 1; // éviter les bords
 
-        // Placer un pavé de 5x5 à la position (x, y)
+            // Vérifier si la zone autour du pavé est valide (en excluant une zone de 3 cases autour du serpent)
+        } while (!estZoneValidePourPave(x, y, paveTaille) || 
+                 !estZoneLibreDuSerpent(x, y, paveTaille, lesX, lesY));
+
+        // Placer le pavé à la position (x, y)
         for (int i = 0; i < paveTaille; i++) {
             for (int j = 0; j < paveTaille; j++) {
                 plateau[y + i][x + j] = CAR_BORDURE;
