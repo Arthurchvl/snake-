@@ -1,16 +1,23 @@
 /**
-* @file version3.c
-* @brief code de la version 3 du projet de SAE1.01, un jeu snake
-* @author Arthur CHAUVEL
-* @version 3.4.2
-* @date 15/11/24
-*
-* troisième version du programme du snake permettant d'afficher les bordures ainsi que des "pavés" au niveau de la zone de jeu,
-*
-* les colisions sont maintenant prises en compte, ainsi une collision de la tete du serpent avec sa queue, la bordure ou un pavé
-*
-* arretera le jeu. Le jeu peut toujours etre arreté avec 'a' et le serpent se déplace initialement vers la droite  jusqu'a appui sur une touche directionnelle.
-*/
+ * @file version3.c
+ * @brief Implémentation de la version 3 du jeu Snake pour le projet SAE1.01.
+ * 
+ * Ce fichier contient le code de la troisième version du jeu Snake. 
+ * Les fonctionnalités incluent :
+ * - Affichage des bordures.
+ * - Placement de pavés aléatoires dans la zone de jeu.
+ * - Gestion des collisions (bordures, pavés, serpent lui-même).
+ * - Déplacement initial du serpent vers la droite jusqu'à appui sur une touche directionnelle.
+ * 
+ * Le jeu se termine si le joueur appuie sur 'a' ou si une collision est détectée.
+ * 
+ * @author Arthur CHAUVEL
+ * @version 3.4.2
+ * @date 15/11/24
+ */
+ /** 
+  * import des bilbliothèques nécéssaires au bon fonctionnement du code
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -20,34 +27,38 @@
 #include <stdbool.h>
 #include <time.h>
 
-const int COORD_MIN = 1; 
-const int LARGEUR_MAX  = 80; 
-const int LONGUEUR_MAX = 40; 
-const int TAILLE_PAVE = 5; 
-const int NBRE_PAVES = 4;    
-const int COORD_X_DEPART = 40; 
-const int COORD_Y_DEPART = 20;
-const int TAILLE_SERPENT = 10;         
-const int TEMPORISATION = 200000; 
-const char CAR_BORDURE = '#';    
-const char VIDE = ' ';     
-const char TETE = 'O';
-const char CORPS = 'X';
-const char HAUT = 'z';
-const char BAS = 's';
-const char GAUCHE = 'q';
-const char DROITE = 'd';
-const char FIN_JEU = 'a';
+/** @brief Constantes globales. */
 
+const int COORD_MIN = 1;          /**< Coordonnée minimale sur le plateau. */
+const int LARGEUR_MAX = 80;       /**< Largeur maximale du plateau. */
+const int LONGUEUR_MAX = 40;      /**< Longueur maximale du plateau. */
+const int TAILLE_PAVE = 5;        /**< Taille des pavés (carrés). */
+const int NBRE_PAVES = 4;         /**< Nombre de pavés à placer sur le plateau. */
+const int COORD_X_DEPART = 40;    /**< Position de départ en X du serpent. */
+const int COORD_Y_DEPART = 20;    /**< Position de départ en Y du serpent. */
+const int TAILLE_SERPENT = 10;    /**< Taille initiale du serpent. */
+const int TEMPORISATION = 200000; /**< Temporisation entre les déplacements en microsecondes. */
+const char CAR_BORDURE = '#';     /**< Caractère utilisé pour afficher les bordures et pavés. */
+const char VIDE = ' ';            /**< Caractère représentant une case vide. */
+const char TETE = 'O';            /**< Caractère représentant la tête du serpent. */
+const char CORPS = 'X';           /**< Caractère représentant le corps du serpent. */
+const char HAUT = 'z';            /**< Touche pour déplacer le serpent vers le haut. */
+const char BAS = 's';             /**< Touche pour déplacer le serpent vers le bas. */
+const char GAUCHE = 'q';          /**< Touche pour déplacer le serpent à gauche. */
+const char DROITE = 'd';          /**< Touche pour déplacer le serpent à droite. */
+const char FIN_JEU = 'a';         /**< Touche pour arrêter le jeu. */
+
+/** @typedef plateau_de_jeu
+ * @brief Définition du plateau de jeu comme une matrice de caractères.
+ */
 typedef char plateau_de_jeu[LARGEUR_MAX + 1][LONGUEUR_MAX + 1];
 
+/* Prototypes des fonctions */
 void afficher(int x, int y, char c);
 void effacer(int x, int y);
 void initPlateau(plateau_de_jeu tableau);
 void initPaves(plateau_de_jeu tableau);
-void generationPavés(int x, int y);
 void affichagePlateau(plateau_de_jeu tableau);
-char definirDirection(char touche, char diection);
 void dessinerSerpent(int lesX[], int lesY[]);
 void progresser(int lesX[], int lesY[], char direction, bool *colision, plateau_de_jeu tableau);
 void gotoXY(int x, int y);
@@ -55,7 +66,13 @@ int kbhit(void);
 void disableEcho();
 void enableEcho();
 
-
+/**
+ * @brief Programme principal du jeu Snake.
+ * 
+ * Initialise le plateau de jeu, place le serpent et les pavés, puis lance la boucle principale.
+ * 
+ * @return EXIT_SUCCESS en cas de succès.
+ */
 int main(){
 
     srand(time(NULL));
@@ -113,21 +130,36 @@ int main(){
     return EXIT_SUCCESS;
 }
 
-void afficher(int x, int y, char c)
-{
-
+/**
+ * @brief Affiche un caractère à une position donnée sur le terminal.
+ * 
+ * @param x Coordonnée en X.
+ * @param y Coordonnée en Y.
+ * @param c Caractère à afficher.
+ */
+void afficher(int x, int y, char c) {
     if (((y >= COORD_MIN) && (y <= LONGUEUR_MAX + 1)) && ((x >= COORD_MIN) && (x <= LARGEUR_MAX + 1))) {
         gotoXY(x, y);
         printf("%c", c);
     }
 }
 
-void effacer(int x, int y)
-{
+/**
+ * @brief Efface un caractère à une position donnée sur le terminal.
+ * 
+ * @param x Coordonnée en X.
+ * @param y Coordonnée en Y.
+ */
+void effacer(int x, int y) {
     afficher(x, y, VIDE);
 }
-void initPlateau(plateau_de_jeu plateau)
-{
+
+/**
+ * @brief Initialise le plateau de jeu avec des bordures et des cases vides.
+ * 
+ * @param tableau Plateau de jeu à initialiser.
+ */
+void initPlateau(plateau_de_jeu plateau) {
     for (int lig = 0; lig <= LARGEUR_MAX; lig++)
     {
         for (int col = 0; col <= LONGUEUR_MAX; col++)
@@ -147,8 +179,13 @@ void initPlateau(plateau_de_jeu plateau)
         initPaves(plateau);
     }
 }
-void initPaves(plateau_de_jeu plateau)
-{
+
+/**
+ * @brief Place un pavé aléatoire sur le plateau.
+ * 
+ * @param tableau Plateau de jeu à modifier.
+ */
+void initPaves(plateau_de_jeu plateau){
     int x, y;
 
     // Générer une position aléatoire pour le pavé, en évitant les bords et la zone du serpent
@@ -164,8 +201,13 @@ void initPaves(plateau_de_jeu plateau)
         }
     }
 }
-void affichagePlateau(plateau_de_jeu plateau)
-{
+
+/**
+ * @brief Affiche le plateau de jeu.
+ * 
+ * @param tableau Plateau de jeu à afficher.
+ */
+void affichagePlateau(plateau_de_jeu plateau) {
     for (int lig = 1; lig <= LARGEUR_MAX; lig++)
     {
         for (int col = 1; col <= LONGUEUR_MAX; col++)
@@ -175,8 +217,13 @@ void affichagePlateau(plateau_de_jeu plateau)
     }
 }
 
-void dessinerSerpent(int lesX[], int lesY[])
-{
+/**
+ * @brief Dessine le serpent sur le plateau.
+ * 
+ * @param lesX Tableau des coordonnées X du serpent.
+ * @param lesY Tableau des coordonnées Y du serpent.
+ */
+void dessinerSerpent(int lesX[], int lesY[]) {
     afficher(lesX[0], lesY[0], TETE);
     for (int i = 1; i < TAILLE_SERPENT; i++)
     {
@@ -184,9 +231,16 @@ void dessinerSerpent(int lesX[], int lesY[])
     }
     fflush(stdout);
 }
-
-void progresser(int lesX[], int lesY[], char direction, bool *colision, plateau_de_jeu plateau)
-{
+/**
+ * @brief Fait avancer le serpent dans une direction donnée et vérifie les collisions.
+ * 
+ * @param lesX Tableau des coordonnées X du serpent.
+ * @param lesY Tableau des coordonnées Y du serpent.
+ * @param direction Direction de déplacement.
+ * @param colision Pointeur vers un booléen indiquant si une collision a été détectée.
+ * @param tableau Plateau de jeu.
+ */
+void progresser(int lesX[], int lesY[], char direction, bool *colision, plateau_de_jeu plateau) {
     effacer(lesX[TAILLE_SERPENT - 1], lesY[TAILLE_SERPENT - 1]); 
 
     for (int i = TAILLE_SERPENT - 1; i > 0; i--)
