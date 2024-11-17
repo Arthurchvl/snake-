@@ -53,14 +53,16 @@ const char FIN_JEU = 'a';         /**< Touche pour arrêter le jeu. */
  */
 typedef char plateau_de_jeu[LARGEUR_MAX + 1][LONGUEUR_MAX + 1];
 
+plateau_de_jeu plateau; /**< Plateau de jeu global. */
+
 /* Prototypes des fonctions */
 void afficher(int x, int y, char c);
 void effacer(int x, int y);
-void initPlateau(plateau_de_jeu tableau);
-void initPaves(plateau_de_jeu tableau);
-void affichagePlateau(plateau_de_jeu tableau);
+void initPlateau(int lesX[], int lesY[]);
+void initPaves(int lesX[], int lesY[]);
+void affichagePlateau(plateau_de_jeu plateau);
 void dessinerSerpent(int lesX[], int lesY[]);
-void progresser(int lesX[], int lesY[], char direction, bool *colision, plateau_de_jeu tableau);
+void progresser(int lesX[], int lesY[], char direction, bool *colision);
 void gotoXY(int x, int y);
 int kbhit(void);
 void disableEcho();
@@ -76,13 +78,12 @@ void enableEcho();
 int main(){
 
     srand(time(NULL));
-    plateau_de_jeu plateau;
     int x, y;
     int lesX[TAILLE_SERPENT], lesY[TAILLE_SERPENT];
     char touche = DROITE;
     char direction = DROITE;
 
-    initPlateau(plateau);
+    initPlateau(lesX, lesY);
     system("clear");
     disableEcho();
 
@@ -120,7 +121,7 @@ int main(){
             direction = DROITE;
         }
 
-        progresser(lesX, lesY, direction, &collision, plateau);
+        progresser(lesX, lesY, direction, &collision);
         usleep(TEMPORISATION);
 
     } while ((touche != FIN_JEU) && (collision != true));
@@ -155,48 +156,57 @@ void effacer(int x, int y) {
 }
 
 /**
- * @brief Initialise le plateau de jeu avec des bordures et des cases vides.
+ * @brief Initialise le plateau de jeu avec des bordures, des cases vides, et des pavés.
  * 
- * @param tableau Plateau de jeu à initialiser.
+ * @param plateau Plateau de jeu à initialiser.
+ * @param lesX plateau des coordonnées X du serpent.
+ * @param lesY plateau des coordonnées Y du serpent.
  */
-void initPlateau(plateau_de_jeu plateau) {
-    for (int lig = 0; lig <= LARGEUR_MAX; lig++)
-    {
-        for (int col = 0; col <= LONGUEUR_MAX; col++)
-        {
-            if (((lig == COORD_MIN) || (lig == LARGEUR_MAX)) || ((col == COORD_MIN) || (col == LONGUEUR_MAX)))
-            {
+void initPlateau(int lesX[], int lesY[]) {
+    for (int lig = 0; lig <= LARGEUR_MAX; lig++) {
+        for (int col = 0; col <= LONGUEUR_MAX; col++) {
+            if (((lig == COORD_MIN) || (lig == LARGEUR_MAX)) || ((col == COORD_MIN) || (col == LONGUEUR_MAX))) {
                 plateau[lig][col] = CAR_BORDURE;
-            }
-            else
-            {
+            } else {
                 plateau[lig][col] = VIDE;
             }
         }
     }
-    for (int i = 0; i < NBRE_PAVES; i++)
-    {
-        initPaves(plateau);
+    for (int i = 0; i < NBRE_PAVES; i++) {
+        initPaves(lesX, lesY);
     }
 }
-
 /**
- * @brief Place un pavé aléatoire sur le plateau.
+ * @brief Place un pavé aléatoire sur le plateau tout en évitant la position du serpent.
  * 
- * @param tableau Plateau de jeu à modifier.
+ * @param plateau Plateau de jeu à modifier.
+ * @param lesX plateau des coordonnées X du serpent.
+ * @param lesY plateau des coordonnées Y du serpent.
  */
-void initPaves(plateau_de_jeu plateau){
+void initPaves(int lesX[], int lesY[]) {
     int x, y;
+    bool chevauchement;
 
-    // Générer une position aléatoire pour le pavé, en évitant les bords et la zone du serpent
-    x = rand() % (LARGEUR_MAX - TAILLE_PAVE - 6) + 3;  // Placer à au moins 3 cases des bords
-    y = rand() % (LONGUEUR_MAX - TAILLE_PAVE - 6) + 3; // Placer à au moins 3 cases des bords
+    do {
+        chevauchement = false;
 
-    // Placer le pavé
-    for (int i = y; i < TAILLE_PAVE + y; i++)
-    {
-        for (int j = x; j < TAILLE_PAVE + x; j++)
-        {
+        // Générer une position aléatoire pour le pavé, en évitant les bords
+        x = rand() % (LARGEUR_MAX - TAILLE_PAVE - 6) + 3;  // Placer à au moins 3 cases des bords
+        y = rand() % (LONGUEUR_MAX - TAILLE_PAVE - 6) + 3; // Placer à au moins 3 cases des bords
+
+        // Vérifier que le pavé ne chevauche pas le corps du serpent
+        for (int i = 0; i < TAILLE_SERPENT; i++) {
+            if ((lesX[i] >= x && lesX[i] < x + TAILLE_PAVE) &&
+                (lesY[i] >= y && lesY[i] < y + TAILLE_PAVE)) {
+                chevauchement = true;
+                break;
+            }
+        }
+    } while (chevauchement);
+
+    // Placer le pavé sur le plateau
+    for (int i = y; i < TAILLE_PAVE + y; i++) {
+        for (int j = x; j < TAILLE_PAVE + x; j++) {
             plateau[j][i] = CAR_BORDURE;
         }
     }
@@ -205,7 +215,7 @@ void initPaves(plateau_de_jeu plateau){
 /**
  * @brief Affiche le plateau de jeu.
  * 
- * @param tableau Plateau de jeu à afficher.
+ * @param plateau Plateau de jeu à afficher.
  */
 void affichagePlateau(plateau_de_jeu plateau) {
     for (int lig = 1; lig <= LARGEUR_MAX; lig++)
@@ -220,8 +230,8 @@ void affichagePlateau(plateau_de_jeu plateau) {
 /**
  * @brief Dessine le serpent sur le plateau.
  * 
- * @param lesX Tableau des coordonnées X du serpent.
- * @param lesY Tableau des coordonnées Y du serpent.
+ * @param lesX plateau des coordonnées X du serpent.
+ * @param lesY plateau des coordonnées Y du serpent.
  */
 void dessinerSerpent(int lesX[], int lesY[]) {
     afficher(lesX[0], lesY[0], TETE);
@@ -231,53 +241,45 @@ void dessinerSerpent(int lesX[], int lesY[]) {
     }
     fflush(stdout);
 }
+
 /**
  * @brief Fait avancer le serpent dans une direction donnée et vérifie les collisions.
  * 
- * @param lesX Tableau des coordonnées X du serpent.
- * @param lesY Tableau des coordonnées Y du serpent.
+ * @param lesX plateau des coordonnées X du serpent.
+ * @param lesY plateau des coordonnées Y du serpent.
  * @param direction Direction de déplacement.
  * @param colision Pointeur vers un booléen indiquant si une collision a été détectée.
- * @param tableau Plateau de jeu.
  */
-void progresser(int lesX[], int lesY[], char direction, bool *colision, plateau_de_jeu plateau) {
+void progresser(int lesX[], int lesY[], char direction, bool *colision) {
     effacer(lesX[TAILLE_SERPENT - 1], lesY[TAILLE_SERPENT - 1]); 
 
-    for (int i = TAILLE_SERPENT - 1; i > 0; i--)
-    {
+    for (int i = TAILLE_SERPENT - 1; i > 0; i--) {
         lesX[i] = lesX[i - 1];
         lesY[i] = lesY[i - 1];
     }
 
-    if (direction == DROITE)
-    {
+    if (direction == DROITE) {
         lesX[0]++;
-    }
-    else if (direction == GAUCHE)
-    {
+    } else if (direction == GAUCHE) {
         lesX[0]--;
-    }
-    else if (direction == HAUT)
-    {
+    } else if (direction == HAUT) {
         lesY[0]--;
-    }
-    else if (direction == BAS)
-    {
+    } else if (direction == BAS) {
         lesY[0]++;
     }
 
-    if (plateau[lesX[0]][lesY[0]] == CAR_BORDURE)
-    {
+    // Vérification des collisions avec les bordures
+    if (plateau[lesX[0]][lesY[0]] == CAR_BORDURE) {
         *colision = true;
     }
 
-    for (int i = 1; i < TAILLE_SERPENT; i++)
-    {
-        if ((lesX[0] == lesX[i]) && (lesY[0] == lesY[i]))
-        {
+    // Vérification des collisions avec le corps du serpent
+    for (int i = 1; i < TAILLE_SERPENT; i++) {
+        if ((lesX[0] == lesX[i]) && (lesY[0] == lesY[i])) {
             *colision = true;
         }
     }
+
     dessinerSerpent(lesX, lesY);
 }
 
