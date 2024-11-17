@@ -12,7 +12,7 @@
  * Le jeu se termine si le joueur appuie sur 'a' ou si une collision est détectée.
  * 
  * @author Arthur CHAUVEL
- * @version 3.4.2
+ * @version 3.5.2
  * @date 15/11/24
  */
  /** 
@@ -29,16 +29,16 @@
 
 /** @brief Constantes globales. */
 
-const int COORD_MIN = 1;          /**< Coordonnée minimale sur le plateau. */
-const int LARGEUR_MAX = 80;       /**< Largeur maximale du plateau. */
-const int LONGUEUR_MAX = 40;      /**< Longueur maximale du plateau. */
-const int TAILLE_PAVE = 5;        /**< Taille des pavés (carrés). */
-const int NBRE_PAVES = 4;         /**< Nombre de pavés à placer sur le plateau. */
-const int COORD_X_DEPART = 40;    /**< Position de départ en X du serpent. */
-const int COORD_Y_DEPART = 20;    /**< Position de départ en Y du serpent. */
-const int TAILLE_SERPENT = 10;    /**< Taille initiale du serpent. */
+const int COORDMIN = 1;          /**< Coordonnée minimale sur le plateau. */
+const int LARGEURMAX = 80;       /**< Largeur maximale du plateau. */
+const int LONGUEURMAX = 40;      /**< Longueur maximale du plateau. */
+const int TAILLEPAVE = 5;        /**< Taille des pavés (carrés). */
+const int NBREPAVES = 4;         /**< Nombre de pavés à placer sur le plateau. */
+const int COORDXDEPART = 40;    /**< Position de départ en X du serpent. */
+const int COORDYDEPART = 20;    /**< Position de départ en Y du serpent. */
+const int TAILLESERPENT = 10;    /**< Taille initiale du serpent. */
 const int TEMPORISATION = 200000; /**< Temporisation entre les déplacements en microsecondes. */
-const char CAR_BORDURE = '#';     /**< Caractère utilisé pour afficher les bordures et pavés. */
+const char CARBORDURE = '#';     /**< Caractère utilisé pour afficher les bordures et pavés. */
 const char VIDE = ' ';            /**< Caractère représentant une case vide. */
 const char TETE = 'O';            /**< Caractère représentant la tête du serpent. */
 const char CORPS = 'X';           /**< Caractère représentant le corps du serpent. */
@@ -46,12 +46,12 @@ const char HAUT = 'z';            /**< Touche pour déplacer le serpent vers le 
 const char BAS = 's';             /**< Touche pour déplacer le serpent vers le bas. */
 const char GAUCHE = 'q';          /**< Touche pour déplacer le serpent à gauche. */
 const char DROITE = 'd';          /**< Touche pour déplacer le serpent à droite. */
-const char FIN_JEU = 'a';         /**< Touche pour arrêter le jeu. */
+const char FINJEU = 'a';         /**< Touche pour arrêter le jeu. */
 
 /** @typedef plateau_de_jeu
  * @brief Définition du plateau de jeu comme une matrice de caractères.
  */
-typedef char plateau_de_jeu[LARGEUR_MAX + 1][LONGUEUR_MAX + 1];
+typedef char plateau_de_jeu[LARGEURMAX + 1][LONGUEURMAX + 1];
 
 plateau_de_jeu plateau; /**< Plateau de jeu global. */
 
@@ -79,7 +79,7 @@ int main(){
 
     srand(time(NULL));
     int x, y;
-    int lesX[TAILLE_SERPENT], lesY[TAILLE_SERPENT];
+    int lesX[TAILLESERPENT], lesY[TAILLESERPENT];
     char touche = DROITE;
     char direction = DROITE;
 
@@ -89,9 +89,9 @@ int main(){
 
     bool collision = false;
 
-    x = COORD_X_DEPART;
-    y = COORD_Y_DEPART;
-    for (int i = 0; i < TAILLE_SERPENT; i++)
+    x = COORDXDEPART;
+    y = COORDYDEPART;
+    for (int i = 0; i < TAILLESERPENT; i++)
     {
         lesX[i] = x--;
         lesY[i] = y;
@@ -124,7 +124,7 @@ int main(){
         progresser(lesX, lesY, direction, &collision);
         usleep(TEMPORISATION);
 
-    } while ((touche != FIN_JEU) && (collision != true));
+    } while ((touche != FINJEU) && (collision != true));
 
     enableEcho();
     system("clear");
@@ -139,7 +139,7 @@ int main(){
  * @param c Caractère à afficher.
  */
 void afficher(int x, int y, char c) {
-    if (((y >= COORD_MIN) && (y <= LONGUEUR_MAX + 1)) && ((x >= COORD_MIN) && (x <= LARGEUR_MAX + 1))) {
+    if (((y >= COORDMIN) && (y <= LONGUEURMAX + 1)) && ((x >= COORDMIN) && (x <= LARGEURMAX + 1))) {
         gotoXY(x, y);
         printf("%c", c);
     }
@@ -163,16 +163,16 @@ void effacer(int x, int y) {
  * @param lesY plateau des coordonnées Y du serpent.
  */
 void initPlateau(int lesX[], int lesY[]) {
-    for (int lig = 0; lig <= LARGEUR_MAX; lig++) {
-        for (int col = 0; col <= LONGUEUR_MAX; col++) {
-            if (((lig == COORD_MIN) || (lig == LARGEUR_MAX)) || ((col == COORD_MIN) || (col == LONGUEUR_MAX))) {
-                plateau[lig][col] = CAR_BORDURE;
+    for (int lig = 0; lig <= LARGEURMAX; lig++) {
+        for (int col = 0; col <= LONGUEURMAX; col++) {
+            if (((lig == COORDMIN) || (lig == LARGEURMAX)) || ((col == COORDMIN) || (col == LONGUEURMAX))) {
+                plateau[lig][col] = CARBORDURE;
             } else {
                 plateau[lig][col] = VIDE;
             }
         }
     }
-    for (int i = 0; i < NBRE_PAVES; i++) {
+    for (int i = 0; i < NBREPAVES; i++) {
         initPaves(lesX, lesY);
     }
 }
@@ -191,13 +191,13 @@ void initPaves(int lesX[], int lesY[]) {
         chevauchement = false;
 
         // Générer une position aléatoire pour le pavé, en évitant les bords
-        x = rand() % (LARGEUR_MAX - TAILLE_PAVE - 6) + 3;  // Placer à au moins 3 cases des bords
-        y = rand() % (LONGUEUR_MAX - TAILLE_PAVE - 6) + 3; // Placer à au moins 3 cases des bords
+        x = rand() % (LARGEURMAX - TAILLEPAVE - 6) + 3;  // Placer à au moins 3 cases des bords
+        y = rand() % (LONGUEURMAX - TAILLEPAVE - 6) + 3; // Placer à au moins 3 cases des bords
 
         // Vérifier que le pavé ne chevauche pas le corps du serpent
-        for (int i = 0; i < TAILLE_SERPENT; i++) {
-            if ((lesX[i] >= x && lesX[i] < x + TAILLE_PAVE) &&
-                (lesY[i] >= y && lesY[i] < y + TAILLE_PAVE)) {
+        for (int i = 0; i < TAILLESERPENT; i++) {
+            if ((lesX[i] >= x && lesX[i] < x + TAILLEPAVE) &&
+                (lesY[i] >= y && lesY[i] < y + TAILLEPAVE)) {
                 chevauchement = true;
                 break;
             }
@@ -205,9 +205,9 @@ void initPaves(int lesX[], int lesY[]) {
     } while (chevauchement);
 
     // Placer le pavé sur le plateau
-    for (int i = y; i < TAILLE_PAVE + y; i++) {
-        for (int j = x; j < TAILLE_PAVE + x; j++) {
-            plateau[j][i] = CAR_BORDURE;
+    for (int i = y; i < TAILLEPAVE + y; i++) {
+        for (int j = x; j < TAILLEPAVE + x; j++) {
+            plateau[j][i] = CARBORDURE;
         }
     }
 }
@@ -218,9 +218,9 @@ void initPaves(int lesX[], int lesY[]) {
  * @param plateau Plateau de jeu à afficher.
  */
 void affichagePlateau(plateau_de_jeu plateau) {
-    for (int lig = 1; lig <= LARGEUR_MAX; lig++)
+    for (int lig = 1; lig <= LARGEURMAX; lig++)
     {
-        for (int col = 1; col <= LONGUEUR_MAX; col++)
+        for (int col = 1; col <= LONGUEURMAX; col++)
         {
             afficher(lig, col, plateau[lig][col]);
         }
@@ -235,7 +235,7 @@ void affichagePlateau(plateau_de_jeu plateau) {
  */
 void dessinerSerpent(int lesX[], int lesY[]) {
     afficher(lesX[0], lesY[0], TETE);
-    for (int i = 1; i < TAILLE_SERPENT; i++)
+    for (int i = 1; i < TAILLESERPENT; i++)
     {
         afficher(lesX[i], lesY[i], CORPS);
     }
@@ -251,9 +251,9 @@ void dessinerSerpent(int lesX[], int lesY[]) {
  * @param colision Pointeur vers un booléen indiquant si une collision a été détectée.
  */
 void progresser(int lesX[], int lesY[], char direction, bool *colision) {
-    effacer(lesX[TAILLE_SERPENT - 1], lesY[TAILLE_SERPENT - 1]); 
+    effacer(lesX[TAILLESERPENT - 1], lesY[TAILLESERPENT - 1]); 
 
-    for (int i = TAILLE_SERPENT - 1; i > 0; i--) {
+    for (int i = TAILLESERPENT - 1; i > 0; i--) {
         lesX[i] = lesX[i - 1];
         lesY[i] = lesY[i - 1];
     }
@@ -269,12 +269,12 @@ void progresser(int lesX[], int lesY[], char direction, bool *colision) {
     }
 
     // Vérification des collisions avec les bordures
-    if (plateau[lesX[0]][lesY[0]] == CAR_BORDURE) {
+    if (plateau[lesX[0]][lesY[0]] == CARBORDURE) {
         *colision = true;
     }
 
     // Vérification des collisions avec le corps du serpent
-    for (int i = 1; i < TAILLE_SERPENT; i++) {
+    for (int i = 1; i < TAILLESERPENT; i++) {
         if ((lesX[0] == lesX[i]) && (lesY[0] == lesY[i])) {
             *colision = true;
         }
