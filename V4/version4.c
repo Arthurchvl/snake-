@@ -137,9 +137,23 @@ int main(){
 
     } while ((touche != FINJEU) && (collision != true));
 
-    if (compteurPomme >= COMPTEURFINJEU) {
-        enableEcho();
-        system("clear");
+    if (compteurPomme > COMPTEURFINJEU){
+        if ((lesX[tailleSerpent - 1] == LONGUEURMAX) && (lesY[tailleSerpent - 1] == COORDCENTREY)){
+            system("clear");
+            printf("Bravo vouus avez gagné !\n");
+        }
+        else if((lesX[tailleSerpent - 1] == COORDMIN) && (lesY[tailleSerpent - 1] == COORDCENTREY)){
+            system("clear");
+            printf("Bravo vouus avez gagné !\n");
+        }
+        else if ((lesX[tailleSerpent - 1] == COORDCENTREX) && (lesY[tailleSerpent - 1] == LARGEURMAX)){
+            system("clear");
+            printf("Bravo vouus avez gagné !\n");
+        }
+        else if ((lesX[tailleSerpent - 1] == COORDCENTREX) && (lesY[tailleSerpent - 1] == COORDMIN)){
+            system("clear");
+            printf("Bravo vouus avez gagné !\n");
+        }
     }
 
     enableEcho();
@@ -299,18 +313,21 @@ void progresser(int lesX[], int lesY[], char direction, bool *colision, bool *ma
         }
     }
 
-    if (plateau[lesX[0]][lesY[0]] == POMME) {
-        *mangerPomme = true; // "le serpent à mangé la pomme"
-        plateau[lesX[0]][lesY[0]] = VIDE; // Enlever la pomme
-        ajouterPomme(lesX, lesY); // Ajouter une nouvelle pomme
-    }
+    do {
+        if (plateau[lesX[0]][lesY[0]] == POMME) {
+            *mangerPomme = true; // "le serpent à mangé la pomme"
+            plateau[lesX[0]][lesY[0]] = VIDE; // Enlever la pomme
+            ajouterPomme(lesX, lesY); // Ajouter une nouvelle pomme
+        }
 
-    if (*mangerPomme == true){
-        compteurPomme++;  // Incrémentation du compteur de pommes
-        tailleSerpent++; // la queue du serpent augmente de 1 
-        *mangerPomme = false; // le booléen revient à false tant que le serpent n'aura pas mangé la pomme suivante
-        temporisation = temporisation - 1000; // Réduire la temporisation pour augmenter la vitesse
-    }
+        if (*mangerPomme == true){
+            compteurPomme++;  // Incrémentation du compteur de pommes
+            tailleSerpent++; // la queue du serpent augmente de 1 
+            *mangerPomme = false; // le booléen revient à false tant que le serpent n'aura pas mangé la pomme suivante
+            temporisation = temporisation - 1000; // Réduire la temporisation pour augmenter la vitesse
+        }
+    } while(compteurPomme < COMPTEURFINJEU);
+    
 
     dessinerSerpent(lesX, lesY);
 }
@@ -326,7 +343,8 @@ void ajouterPomme(int lesX[], int lesY[]){
         emplacementValide = (plateau[x][y] == VIDE);  // Condition correcte
     } while (!emplacementValide);
 
-plateau[x][y] = POMME;
+    plateau[x][y] = POMME;
+    afficher(x, y, POMME);
 }
 
 /**

@@ -1,14 +1,19 @@
 /**
  * @file version4.c
- * @brief Implémentation de la version 4 du jeu Snake.
+ * @brief Implémentation de la version 4 du jeu Snake pour le projet SAE1.01.
  * 
- * Ce fichier contient le code du jeu Snake avec les modifications suivantes :
- * - Les issues apparaissent seulement après que le serpent a mangé 10 pommes.
- * - Le jeu se termine uniquement lorsque le serpent sort par une issue après avoir mangé 10 pommes.
- * - Le serpent s'allonge avec chaque pomme mangée et la vitesse augmente.
- * - Les pavés sont placés aléatoirement et restent sur le plateau.
+ * Ce fichier contient le code de la quatrième version du jeu Snake. 
+ * Les fonctionnalités incluent :
+ * - Affichage des bordures avec des "issues".
+ * - Placement de pavés aléatoires dans la zone de jeu.
+ * - Gestion des collisions (bordures, pavés, serpent lui-même).
+ * - Déplacement initial du serpent vers la droite jusqu'à appui sur une touche directionnelle.
+ * - Système de pommes à manger, allongement du serpent et augmentation de la vitesse.
+ * - Passage à travers les issues (réapparition sur le côté opposé).
  * 
- * @author Arthur
+ * Le jeu se termine lorsque 10 pommes sont mangées ou si le joueur appuie sur 'a'.
+ * 
+ * @author Arthur CHAUVEL
  * @version 4
  * @date 15/11/24
  */
@@ -33,10 +38,10 @@ const int COORDXDEPART = 40;    /**< Position de départ en X du serpent. */
 const int COORDYDEPART = 20;    /**< Position de départ en Y du serpent. */
 const int TAILLESERPENT = 10;    /**< Taille initiale du serpent. */
 const int TEMPORISATION = 200000; /**< Temporisation entre les déplacements en microsecondes. */
-const int TEMPORISATION_MIN = 50000; /**< Temporisation minimale pour éviter une vitesse excessive. */
-const int COMPTEURFINJEU = 10;    /**< Nombre de pommes nécessaires pour déclencher les issues. */
+const int COMPTEURFINJEU = 10;    /**< Nombre de pommes nécessaires pour gagner. */
 const int COORDCENTREX = 20;    /**< Coordonnée X du centre des côtés haut et bas du plateau. */
 const int COORDCENTREY = 40;    /**< Coordonnée Y du centre des côtés gauche et droit du plateau. */
+const int RETRAITTEMPORISATION = 10000; /** Nombre retiré à TEMPORISATION a chaque fois que le serpent mange une pomme */
 const char POMME = '6';         /**< Caractère représentant une pomme. */
 const char CARBORDURE = '#';    /**< Caractère utilisé pour afficher les bordures et pavés. */
 const char VIDE = ' ';          /**< Caractère représentant une case vide. */
@@ -57,17 +62,15 @@ plateau_de_jeu plateau; /**< Plateau de jeu global. */
 int compteurPomme = 0; /**< Variable compteur de pommes mangées. */
 int tailleSerpent = TAILLESERPENT;
 int temporisation = TEMPORISATION;
-bool issuesActives = false; /**< Indicateur pour savoir si les issues sont activées. */
 
 /* Prototypes des fonctions */
 void afficher(int x, int y, char c);
 void effacer(int x, int y);
 void initPlateau(int lesX[], int lesY[]);
-void activerIssues();
 void initPaves(int lesX[], int lesY[]);
 void affichagePlateau(plateau_de_jeu plateau);
 void dessinerSerpent(int lesX[], int lesY[]);
-void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *mangerPomme, bool *sortieIssue);
+void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *mangerPomme);
 void ajouterPomme(int lesX[], int lesY[]);
 void gotoXY(int x, int y);
 int kbhit(void);
@@ -93,7 +96,6 @@ int main() {
 
     bool collision = false;
     bool mangerPomme = false;
-    bool sortieIssue = false;
 
     for (int i = 0; i < tailleSerpent; i++) {
         lesX[i] = COORDXDEPART - i;
@@ -102,35 +104,51 @@ int main() {
     affichagePlateau(plateau);
     ajouterPomme(lesX, lesY);
 
-    do {
-        if (kbhit()) {
+    do
+    {
+        if (kbhit())
+        {
             touche = getchar();
         }
 
-        if (touche == HAUT && direction != BAS) direction = HAUT;
-        else if (touche == BAS && direction != HAUT) direction = BAS;
-        else if (touche == GAUCHE && direction != DROITE) direction = GAUCHE;
-        else if (touche == DROITE && direction != GAUCHE) direction = DROITE;
-
-        progresser(lesX, lesY, direction, &collision, &mangerPomme, &sortieIssue);
-
-        // Active les issues lorsque 10 pommes sont mangées
-        if (compteurPomme >= COMPTEURFINJEU && !issuesActives) {
-            activerIssues();
-            issuesActives = true;
+        if (touche == HAUT && direction != BAS) {
+            direction = HAUT;
         }
 
+        else if ((touche == BAS) && (direction != HAUT)) {
+            direction = BAS;
+        }
+
+        else if ((touche == GAUCHE) && (direction != DROITE)) {
+            direction = GAUCHE;
+        }
+
+        else if ((touche == DROITE) && (direction != GAUCHE)) {
+            direction = DROITE;
+        }
+        
+        printf("Score : %d\n", compteurPomme);
+        progresser(lesX, lesY, direction, &collision, &mangerPomme);
         usleep(temporisation);
 
-    } while (touche != FINJEU && !collision && !sortieIssue);
+    } while ((touche != FINJEU) && !collision && compteurPomme < COMPTEURFINJEU);
 
-    enableEcho();
-    system("clear");
+    if (mangerPomme) {
+        compteurPomme++;
+        tailleSerpent++;
+        temporisation =  temporisation - RETRAITTEMPORISATION;
+        mangerPomme = false;
+    }
 
-    if (sortieIssue) {
-        printf("Bravo, vous avez gagné en sortant par une issue après avoir mangé 10 pommes !\n");
-    } else if (collision) {
-        printf("Game Over : Vous avez percuté un obstacle !\n");
+    if (compteurPomme >= COMPTEURFINJEU) {
+        enableEcho();
+        system("clear");
+        printf("Bravo, vous avez gagné en mangeant 10 pommes !\n");
+    }
+    else if ((collision == true) || (touche = FINJEU)){
+        enableEcho();
+        system("clear");
+        printf("Vous avez perdu !\n");
     }
 
     return EXIT_SUCCESS;
@@ -138,6 +156,10 @@ int main() {
 
 /**
  * @brief Affiche un caractère à une position donnée sur le terminal.
+ * 
+ * @param x Coordonnée en X.
+ * @param y Coordonnée en Y.
+ * @param c Caractère à afficher.
  */
 void afficher(int x, int y, char c) {
     gotoXY(x, y);
@@ -146,14 +168,19 @@ void afficher(int x, int y, char c) {
 
 /**
  * @brief Efface un caractère à une position donnée sur le terminal.
+ * 
+ * @param x Coordonnée en X.
+ * @param y Coordonnée en Y.
  */
 void effacer(int x, int y) {
     afficher(x, y, VIDE);
 }
 
 /**
- * @brief Initialise le plateau de jeu avec des bordures, des cases vides, et des pavés.
- * Les issues ne sont pas activées au départ.
+ * @brief Initialise le plateau de jeu avec des bordures, des cases vides, des pavés, et des "issues".
+ * 
+ * @param lesX Coordonnées X du serpent.
+ * @param lesY Coordonnées Y du serpent.
  */
 void initPlateau(int lesX[], int lesY[]) {
     for (int lig = 0; lig <= LARGEURMAX; lig++) {
@@ -165,22 +192,16 @@ void initPlateau(int lesX[], int lesY[]) {
             }
         }
     }
-    for (int i = 0; i < NBREPAVES; i++) initPaves(lesX, lesY);
-}
-
-/**
- * @brief Active les issues au centre de chaque côté du plateau.
- */
-void activerIssues() {
-    plateau[COORDMIN][COORDCENTREY] = VIDE;  // Issue en haut
-    plateau[LARGEURMAX][COORDCENTREY] = VIDE;  // Issue en bas
-    plateau[COORDCENTREX][COORDMIN] = VIDE;  // Issue à gauche
-    plateau[COORDCENTREX][LONGUEURMAX] = VIDE;  // Issue à droite
-    affichagePlateau(plateau);
+    for (int i = 0; i < NBREPAVES; i++) {
+        initPaves(lesX, lesY);
+    }
 }
 
 /**
  * @brief Place un pavé aléatoire sur le plateau en évitant le serpent.
+ * 
+ * @param lesX Coordonnées X du serpent.
+ * @param lesY Coordonnées Y du serpent.
  */
 void initPaves(int lesX[], int lesY[]) {
     int x, y;
@@ -188,13 +209,12 @@ void initPaves(int lesX[], int lesY[]) {
 
     do {
         chevauchement = false;
-        x = rand() % (LARGEURMAX - TAILLEPAVE - 1) + 1;
-        y = rand() % (LONGUEURMAX - TAILLEPAVE - 1) + 1;
+        x = rand() % (LARGEURMAX - TAILLEPAVE - 6) + 3;
+        y = rand() % (LONGUEURMAX - TAILLEPAVE - 6) + 3;
 
         for (int i = 0; i < tailleSerpent; i++) {
             if (lesX[i] >= x && lesX[i] < x + TAILLEPAVE && lesY[i] >= y && lesY[i] < y + TAILLEPAVE) {
                 chevauchement = true;
-                break;
             }
         }
     } while (chevauchement);
@@ -207,9 +227,7 @@ void initPaves(int lesX[], int lesY[]) {
 }
 
 /**
- * @brief Affiche le plateau de jeu sur le terminal.
- * 
- * @param plateau Plateau de jeu à afficher.
+ * @brief Affiche le plateau.
  */
 void affichagePlateau(plateau_de_jeu plateau) {
     for (int lig = 1; lig <= LARGEURMAX; lig++) {
@@ -231,9 +249,9 @@ void dessinerSerpent(int lesX[], int lesY[]) {
 }
 
 /**
- * @brief Déplace le serpent, gère les collisions, les pommes, et les issues.
+ * @brief Déplace le serpent, gère les collisions et les pommes.
  */
-void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *mangerPomme, bool *sortieIssue) {
+void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *mangerPomme) {
     effacer(lesX[tailleSerpent - 1], lesY[tailleSerpent - 1]);
 
     for (int i = tailleSerpent - 1; i > 0; i--) {
@@ -241,34 +259,32 @@ void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *m
         lesY[i] = lesY[i - 1];
     }
 
-    if (direction == DROITE) lesX[0]++;
-    else if (direction == GAUCHE) lesX[0]--;
-    else if (direction == HAUT) lesY[0]--;
-    else if (direction == BAS) lesY[0]++;
-
-    // Détection des issues actives
-    if (issuesActives) {
-        if ((lesX[0] == COORDMIN && lesY[0] == COORDCENTREY) ||
-            (lesX[0] == LARGEURMAX && lesY[0] == COORDCENTREY) ||
-            (lesY[0] == COORDMIN && lesX[0] == COORDCENTREX) ||
-            (lesY[0] == LONGUEURMAX && lesX[0] == COORDCENTREX)) {
-            *sortieIssue = true;
-            return;
-        }
+    if (direction == DROITE){
+        lesX[0]++;
+    }
+    else if (direction == GAUCHE){
+        lesX[0]--;
+    }
+    else if (direction == HAUT){
+        lesY[0]--;
+    }
+    else if (direction == BAS){
+        lesY[0]++;
     }
 
     // Vérification des collisions
-    if (plateau[lesX[0]][lesY[0]] == CARBORDURE) *collision = true;
+    if (plateau[lesX[0]][lesY[0]] == CARBORDURE){
+        *collision = true;
+    }
     for (int i = 1; i < tailleSerpent; i++) {
-        if (lesX[0] == lesX[i] && lesY[0] == lesY[i]) *collision = true;
+        if (lesX[0] == lesX[i] && lesY[0] == lesY[i]){
+             *collision = true;
+        }
     }
 
     // Gestion des pommes
     if (plateau[lesX[0]][lesY[0]] == POMME) {
         *mangerPomme = true;
-        compteurPomme++;
-        tailleSerpent++;
-        temporisation = (temporisation > TEMPORISATION_MIN) ? temporisation - 10000 : TEMPORISATION_MIN;
         plateau[lesX[0]][lesY[0]] = VIDE;
         ajouterPomme(lesX, lesY);
     }
@@ -282,20 +298,16 @@ void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *m
 void ajouterPomme(int lesX[], int lesY[]) {
     int x, y;
     bool emplacementValide;
-    int tentatives = 0;
 
     do {
         x = rand() % (LARGEURMAX - 1) + 1;
         y = rand() % (LONGUEURMAX - 1) + 1;
 
         emplacementValide = (plateau[x][y] == VIDE);
-        tentatives++;
-    } while (!emplacementValide && tentatives < 1000);
+    } while (!emplacementValide);
 
-    if (tentatives < 1000) {
-        plateau[x][y] = POMME;
-        afficher(x, y, POMME);
-    }
+    plateau[x][y] = POMME;
+    afficher(x, y, POMME);
 }
 
 /**
