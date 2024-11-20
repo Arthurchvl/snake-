@@ -14,7 +14,7 @@
  * Le jeu se termine lorsque 10 pommes sont mangées ou si le joueur appuie sur 'a'.
  * 
  * @author Arthur CHAUVEL
- * @version 4
+ * @version 4.5.3
  * @date 15/11/24
  */
 
@@ -29,37 +29,39 @@
 
 /** @brief Constantes globales. */
 
-const int COORDMIN = 1;          /**< Coordonnée minimale sur le plateau. */
-const int LARGEURMAX = 80;       /**< Largeur maximale du plateau. */
-const int LONGUEURMAX = 40;      /**< Longueur maximale du plateau. */
-const int TAILLEPAVE = 5;        /**< Taille des pavés (carrés). */
-const int NBREPAVES = 4;         /**< Nombre de pavés à placer sur le plateau. */
-const int COORDXDEPART = 40;    /**< Position de départ en X du serpent. */
-const int COORDYDEPART = 20;    /**< Position de départ en Y du serpent. */
-const int TAILLESERPENT = 10;    /**< Taille initiale du serpent. */
-const int TEMPORISATION = 200000; /**< Temporisation entre les déplacements en microsecondes. */
-const int COMPTEURFINJEU = 10;    /**< Nombre de pommes nécessaires pour gagner. */
-const int COORDCENTREX = 20;    /**< Coordonnée X du centre des côtés haut et bas du plateau. */
-const int COORDCENTREY = 40;    /**< Coordonnée Y du centre des côtés gauche et droit du plateau. */
+#define LARGEURMAX 80       
+/** Largeur maximale du plateau. */
+#define LONGUEURMAX 40      
+/** Longueur maximale du plateau. */
+const int COORDMIN = 1;          /** Coordonnée minimale sur le plateau. */
+const int TAILLEPAVE = 5;        /** Taille des pavés (carrés). */
+const int NBREPAVES = 4;         /** Nombre de pavés à placer sur le plateau. */
+const int COORDXDEPART = 40;    /** Position de départ en X du serpent. */
+const int COORDYDEPART = 20;    /** Position de départ en Y du serpent. */
+const int TAILLESERPENT = 10;    /** Taille initiale du serpent. */
+const int TEMPORISATION = 200000; /** Temporisation entre les déplacements en microsecondes. */
+const int COMPTEURFINJEU = 10;    /** Nombre de pommes nécessaires pour gagner. */
+const int COORDCENTREX = LONGUEURMAX/2;    /** Coordonnée X du centre des côtés haut et bas du plateau. */
+const int COORDCENTREY = LARGEURMAX/2;    /** Coordonnée Y du centre des côtés gauche et droit du plateau. */
 const int RETRAITTEMPORISATION = 10000; /** Nombre retiré à TEMPORISATION a chaque fois que le serpent mange une pomme */
-const char POMME = '6';         /**< Caractère représentant une pomme. */
-const char CARBORDURE = '#';    /**< Caractère utilisé pour afficher les bordures et pavés. */
-const char VIDE = ' ';          /**< Caractère représentant une case vide. */
-const char TETE = 'O';          /**< Caractère représentant la tête du serpent. */
-const char CORPS = 'X';         /**< Caractère représentant le corps du serpent. */
-const char HAUT = 'z';          /**< Touche pour déplacer le serpent vers le haut. */
-const char BAS = 's';           /**< Touche pour déplacer le serpent vers le bas. */
-const char GAUCHE = 'q';        /**< Touche pour déplacer le serpent à gauche. */
-const char DROITE = 'd';        /**< Touche pour déplacer le serpent à droite. */
-const char FINJEU = 'a';        /**< Touche pour arrêter le jeu. */
+const char POMME = '6';         /** Caractère représentant une pomme. */
+const char CARBORDURE = '#';    /** Caractère utilisé pour afficher les bordures et pavés. */
+const char VIDE = ' ';          /** Caractère représentant une case vide. */
+const char TETE = 'O';          /** Caractère représentant la tête du serpent. */
+const char CORPS = 'X';         /** Caractère représentant le corps du serpent. */
+const char HAUT = 'z';          /** Touche pour déplacer le serpent vers le haut. */
+const char BAS = 's';           /** Touche pour déplacer le serpent vers le bas. */
+const char GAUCHE = 'q';        /** Touche pour déplacer le serpent à gauche. */
+const char DROITE = 'd';        /** Touche pour déplacer le serpent à droite. */
+const char FINJEU = 'a';        /** Touche pour arrêter le jeu. */
 
 /** @typedef plateau_de_jeu
  * @brief Définition du plateau de jeu comme une matrice de caractères.
  */
 typedef char plateau_de_jeu[LARGEURMAX + 1][LONGUEURMAX + 1];
 
-plateau_de_jeu plateau; /**< Plateau de jeu global. */
-int compteurPomme = 0; /**< Variable compteur de pommes mangées. */
+plateau_de_jeu plateau; /** Plateau de jeu global. */
+int compteurPomme = 0; /** Variable compteur de pommes mangées. */
 int tailleSerpent = TAILLESERPENT;
 int temporisation = TEMPORISATION;
 
@@ -104,51 +106,52 @@ int main() {
     affichagePlateau(plateau);
     ajouterPomme(lesX, lesY);
 
-    do
-    {
-        if (kbhit())
-        {
-            touche = getchar();
-        }
+do {
+    if (kbhit()) {
+        touche = getchar();
+    }
 
-        if (touche == HAUT && direction != BAS) {
-            direction = HAUT;
-        }
+    if (touche == HAUT && direction != BAS) {
+        direction = HAUT;
+    }
+    else if (touche == BAS && direction != HAUT) {
+        direction = BAS;
+    }
+    else if (touche == GAUCHE && direction != DROITE) {
+        direction = GAUCHE;
+    }
+    else if (touche == DROITE && direction != GAUCHE) {
+        direction = DROITE;
+    }
 
-        else if ((touche == BAS) && (direction != HAUT)) {
-            direction = BAS;
-        }
+    progresser(lesX, lesY, direction, &collision, &mangerPomme);
 
-        else if ((touche == GAUCHE) && (direction != DROITE)) {
-            direction = GAUCHE;
-        }
-
-        else if ((touche == DROITE) && (direction != GAUCHE)) {
-            direction = DROITE;
-        }
-        
-        printf("Score : %d\n", compteurPomme);
-        progresser(lesX, lesY, direction, &collision, &mangerPomme);
-        usleep(temporisation);
-
-    } while ((touche != FINJEU) && !collision && compteurPomme < COMPTEURFINJEU);
-
+    // Gestion de la pomme mangée
     if (mangerPomme) {
         compteurPomme++;
         tailleSerpent++;
-        temporisation =  temporisation - RETRAITTEMPORISATION;
-        mangerPomme = false;
+        temporisation =temporisation - RETRAITTEMPORISATION; // Augmentation de la vitesse
+        mangerPomme = false; // Réinitialiser le flag
     }
+
+    usleep(temporisation);
+
+} while (touche != FINJEU && !collision && compteurPomme < COMPTEURFINJEU);
 
     if (compteurPomme >= COMPTEURFINJEU) {
         enableEcho();
         system("clear");
         printf("Bravo, vous avez gagné en mangeant 10 pommes !\n");
     }
-    else if ((collision == true) || (touche = FINJEU)){
+    else if (collision == true){
         enableEcho();
         system("clear");
         printf("Vous avez perdu !\n");
+    }
+    else if (touche == FINJEU){
+        enableEcho();
+        system("clear");
+        printf("Vous avez déclaré forfait. Dommage !\n");
     }
 
     return EXIT_SUCCESS;
@@ -292,6 +295,18 @@ void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *m
     dessinerSerpent(lesX, lesY);
 }
 
+bool estCaseLibre(int x, int y, int lesX[], int lesY[]) {
+    if (plateau[x][y] != VIDE) {
+        return false; // Case non vide
+    }
+    for (int i = 0; i < tailleSerpent; i++) {
+        if (lesX[i] == x && lesY[i] == y) {
+            return false; // Case occupée par le serpent
+        }
+    }
+    return true;
+}
+
 /**
  * @brief Ajoute une pomme à une position aléatoire.
  */
@@ -303,9 +318,8 @@ void ajouterPomme(int lesX[], int lesY[]) {
         x = rand() % (LARGEURMAX - 1) + 1;
         y = rand() % (LONGUEURMAX - 1) + 1;
 
-        emplacementValide = (plateau[x][y] == VIDE);
+        emplacementValide = estCaseLibre(x, y, lesX, lesY);
     } while (!emplacementValide);
-
     plateau[x][y] = POMME;
     afficher(x, y, POMME);
 }
