@@ -12,8 +12,6 @@
 #define CARBORDURE '#'
 #define SERPENT 'S'
 #define POMME '6'
-
-// Direction du serpent
 #define HAUT 0
 #define DROITE 1
 #define BAS 2
