@@ -57,7 +57,7 @@ plateau_de_jeu plateau;
 void afficher(int x, int y, char c);
 void effacer(int x, int y);
 void initPlateau(int lesX[], int lesY[]);
-void initPaves(int lesX[], int lesY[]);
+void initPaves(plateau_de_jeu plateau);
 bool positionUnique(int x, int y, int *tempX, int *tempY, int taille);
 void affichagePlateau(plateau_de_jeu plateau);
 void dessinerSerpent(int lesX[], int lesY[], int taille);
@@ -73,7 +73,7 @@ int main() {
     if (COORDXDEPART < COORDMIN || COORDXDEPART > LARGEURMAX ||
         COORDYDEPART < COORDMIN || COORDYDEPART > LONGUEURMAX) {
         fprintf(stderr, "Erreur : les coordonnées de départ du serpent sont en dehors du plateau.\n");
-    return EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
     int lesX[LARGEURMAX * LONGUEURMAX], lesY[LARGEURMAX * LONGUEURMAX];
     int tailleSerpent = TAILLEINIT, pommesMangees = 0, vitesse = VITESSE_INITIALE;
@@ -104,7 +104,7 @@ int main() {
 
         progresser(lesX, lesY, &tailleSerpent, direction, &collision, &mangePomme);
 
-        if ((mangePomme)) {
+        if (mangePomme) {
             pommesMangees++;
             ajouterPomme();
             vitesse = vitesse - RETRAITVITESSE;
@@ -131,7 +131,7 @@ void ajouterPomme() {
     do {
         x = rand() % LARGEURMAX + 1;
         y = rand() % LONGUEURMAX + 1;
-    } while (plateau[x][y] != VIDE);
+    } while (plateau[x][y] != VIDE || x == LARGEURMAX / 2 || y == LONGUEURMAX / 2);
 
     plateau[x][y] = POMME;
     afficher(x, y, POMME);
@@ -140,17 +140,17 @@ void ajouterPomme() {
 void initPlateau(int lesX[], int lesY[]) {
     for (int lig = 0; lig <= LARGEURMAX; lig++) {
         for (int col = 0; col <= LONGUEURMAX; col++) {
-            if ((lig == COORDMIN || lig == LARGEURMAX) && (col != LONGUEURMAX / 2)) {
-                plateau[lig][col] = CARBORDURE;
-            } else if ((col == COORDMIN || col == LONGUEURMAX) && (lig != LARGEURMAX / 2)) {
-                plateau[lig][col] = CARBORDURE;
+            if (lig == COORDMIN || lig == LARGEURMAX) {
+                plateau[lig][col] = (col == LONGUEURMAX / 2) ? VIDE : CARBORDURE;
+            } else if (col == COORDMIN || col == LONGUEURMAX) {
+                plateau[lig][col] = (lig == LARGEURMAX / 2) ? VIDE : CARBORDURE;
             } else {
                 plateau[lig][col] = VIDE;
             }
         }
     }
     for (int i = 0; i < NBREPAVES; i++) {
-        initPaves(lesX, lesY);
+        initPaves(plateau);
     }
 }
 
@@ -220,51 +220,41 @@ void effacer(int x, int y) {
  * @param lesX Plateau des coordonnées X du serpent.
  * @param lesY Plateau des coordonnées Y du serpent.
  */
+void initPaves(plateau_de_jeu plateau) {
+    srand(time(NULL));
 
-void initPaves(int lesX[], int lesY[]) {
-    int x, y;
-    bool chevauchement = true;
-    int compteur = 0;
+    for (int p = 0; p < NBREPAVES; p++) 
+    {
+        int x, y;
 
-    // Réduire NBREPAVES pour tester avec moins de pavés
-    while (compteur < NBREPAVES) {
         do {
-            chevauchement = false;
-            x = rand() % (LARGEURMAX - TAILLEPAVE - 6) + 3;
-            y = rand() % (LONGUEURMAX - TAILLEPAVE - 6) + 3;
+            x = rand() % (LARGEURMAX - 2 * TAILLEPAVE -2) + 2;
+            y = rand() % (LONGUEURMAX - 2 * TAILLEPAVE -2) + 2;
+        } while (plateau[y][x] == CARBORDURE || 
+                 ((x >= COORDXDEPART - 10) ||
+                  (x <= COORDXDEPART + 10) || 
+                  (y >= COORDYDEPART -10) || 
+                  (y <= COORDYDEPART + 10)));
 
-            for (int i = 0; i < TAILLEINIT; i++) {
-                int xMin = lesX[i] - ZONEPROTECTIONSERPENT;
-                int xMax = lesX[i] + ZONEPROTECTIONSERPENT;
-                int yMin = lesY[i] - ZONEPROTECTIONSERPENT;
-                int yMax = lesY[i] + ZONEPROTECTIONSERPENT;
-
-                if (x >= xMin && x <= xMax && y >= yMin && y <= yMax) {
-                    chevauchement = true;
-                    break;
-                }
-            }
-        } while (chevauchement);
-
-        // Place le pavé sur le plateau
-        for (int dx = x; dx < x + TAILLEPAVE; dx++) {
-            for (int dy = y; dy < y + TAILLEPAVE; dy++) {
-                plateau[dx][dy] = CARBORDURE;
+        for (int i = 0; i < TAILLEPAVE; i++)
+        {
+            for (int j = 0; j < TAILLEPAVE; j++) 
+            {
+                plateau[y + i][x + j] = CARBORDURE;
             }
         }
-        compteur++;
     }
 }
 
 // Fonction pour vérifier si une paire (x, y) existe déjà
 bool positionUnique(int x, int y, int *tempX, int *tempY, int taille) {
-    bool statut;
-    for (int i = 0; i < taille; i++){
-        if (tempX[i] == x && tempY[i] == y){
+    bool statut = true;
+    for (int i = 0; i < taille; i++) {
+        if (tempX[i] == x && tempY[i] == y) {
             statut = false; // La position est déjà utilisée
+            break;
         }
     }
-    statut = true; // La position est unique
     return statut;
 }
 
