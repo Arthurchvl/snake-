@@ -6,27 +6,27 @@
 #include <termios.h>
 #include <fcntl.h>
 
-#define LARGEUR_ECRAN 80
-#define HAUTEUR_ECRAN 40
-#define TAILLE_SERPENT 10
-#define MAX_TAILLE_SERPENT 100
-#define NB_PAVES 4
-#define TAILLE_PAVES 5
-#define LIMITE_ECRAN 0
-#define TETE 'O'
-#define CORPS 'X'
-#define POMME '6'
-#define ARRET 'a'
-#define TEMPORISER 200000
-#define DROITE 'd'
-#define GAUCHE 'q'
-#define HAUT 'z'
-#define BAS 's'
-#define MAX_POMMES 10
-#define START_SAFE_ZONE_X 15
-#define END_SAFE_ZONE_X 48
-#define START_SAFE_ZONE_Y 5
-#define END_SAFE_ZONE_Y 7
+#define LARGEURMAX 80
+#define HAUTEURMAX 40
+
+const int TAILLESERPENT = 10;
+const int NBREPAVE = 4;
+const int TAILLEPAVE = 5;
+const int TEMPORISATION = 200000;
+const int NBREPOMMESFINJEU = 10;
+const int STARTSAFEZONEX = 15;
+const int ENDSAFEZONEX = 48;
+const int STARTSAFEZONEY = 5;
+const int ENDSAFEZONEY = 7;
+const int MAXTAILLESERPENT = 100;
+const char TETE = 'O';
+const char CORPS = 'X';
+const char POMME = '6';
+const char ARRET = 'a';
+const char DROITE = 'd';
+const char GAUCHE = 'q';
+const char HAUT = 'z';
+const char BAS = 's';
 
 
 /* Déclaration des fonctions existantes */
@@ -35,34 +35,36 @@ void enableEcho();
 int kbhit();
 void afficher(int x, int y, char c);
 void dessinerSerpent(int lesX[], int lesY[], int taille);
-void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *pommeMangee, int *tailleSerpent);
+void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *pommeMangee);
 void gotoXY(int x, int y);
 void initPlateau();
-void dessinerPlateau(int lesX[], int lesY[], int tailleSerpent);
+void dessinerPlateau(int lesX[], int lesY[]);
 void placerPaves();
 void ajouterPomme();
 
 /* Plateau de jeu */
-char plateau[HAUTEUR_ECRAN][LARGEUR_ECRAN];
+char plateau[HAUTEURMAX][LARGEURMAX];
+int tailleSerpent = TAILLESERPENT;
 
 /* Position de la pomme */
 int posX_pomme = -1, posY_pomme = -1;
 
 int main() {
-    int lesX[MAX_TAILLE_SERPENT] = {40, 39, 38, 37, 36, 35, 34, 33, 32, 31};
-    int lesY[MAX_TAILLE_SERPENT] = {20, 20, 20, 20, 20, 20, 20, 20, 20, 20};
-    int tailleSerpent = TAILLE_SERPENT;
+    int lesX[MAXTAILLESERPENT] = {40, 39, 38, 37, 36, 35, 34, 33, 32, 31};
+    int lesY[MAXTAILLESERPENT] = {20, 20, 20, 20, 20, 20, 20, 20, 20, 20};
     char direction = DROITE;
-    bool collision = false, pommeMangee = false;
+    bool collision = false;
+    bool pommeMangee = false;
+    bool forfait = false;
     int pommesMangees = 0;
 
     initPlateau();
     placerPaves();
     ajouterPomme();
-    dessinerPlateau(lesX, lesY, tailleSerpent);
+    dessinerPlateau(lesX, lesY);
 
     disableEcho();
-    while (!collision && pommesMangees < MAX_POMMES) 
+    while (!collision && pommesMangees < NBREPOMMESFINJEU) 
     {
         if (kbhit()) 
         {
@@ -74,47 +76,53 @@ int main() {
                 {
                 direction = touche;
             }
-            if (touche == ARRET) break;
+            if (touche == ARRET){
+                forfait = true;
+                break;
+            }
         }
-        progresser(lesX, lesY, direction, &collision, &pommeMangee, &tailleSerpent);
+        progresser(lesX, lesY, direction, &collision, &pommeMangee);
         if (pommeMangee) 
         {
             pommesMangees++;
             ajouterPomme();
         }
-        dessinerPlateau(lesX, lesY, tailleSerpent);
-        usleep(TEMPORISER - pommesMangees * 10000); // Augmenter la vitesse progressivement
+        dessinerPlateau(lesX, lesY);
+        usleep(TEMPORISATION - pommesMangees * 10000); // Augmenter la vitesse progressivement
     }
     enableEcho();
 
     if (collision) 
     {
-        printf("Collision détectée. Fin du jeu.\n");
+        system("clear");
+        printf("Collision détectée. Vous avez perdu.\n");
     }
-    else if (pommesMangees >= MAX_POMMES)
+    else if (pommesMangees >= NBREPOMMESFINJEU)
     {
-        printf("Vous avez gagné ! Félicitations !\n");
+        system("clear");
+        printf("Vous avez gagné. Félicitations !\n");
     }
-    else 
+    else if (forfait)
     {
-        printf("Jeu arrêté par l'utilisateur.\n");
+        system("clear");
+        printf("Vous avez déclaré forfait. Dommage !\n");
     }
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 /* Initialise le plateau avec les issues */
 void initPlateau() {
-    for (int i = 0; i < HAUTEUR_ECRAN; i++) 
+    for (int i = 0; i < HAUTEURMAX; i++) 
     {
-        for (int j = 0; j < LARGEUR_ECRAN; j++) 
+        for (int j = 0; j < LARGEURMAX; j++) 
         {
-            if (i == 0 || i == HAUTEUR_ECRAN - 1) 
+            if (i == 0 || i == HAUTEURMAX - 1) 
             {
-                plateau[i][j] = (j == LARGEUR_ECRAN / 2) ? ' ' : '#';
+                plateau[i][j] = (j == LARGEURMAX / 2) ? ' ' : '#';
             } 
-            else if (j == 0 || j == LARGEUR_ECRAN - 1) 
+            else if (j == 0 || j == LARGEURMAX - 1) 
             {
-                plateau[i][j] = (i == HAUTEUR_ECRAN / 2) ? ' ' : '#';
+                plateau[i][j] = (i == HAUTEURMAX / 2) ? ' ' : '#';
             } 
             else 
             {
@@ -127,44 +135,54 @@ void initPlateau() {
 /* Place une pomme aléatoirement sur une case vide */
 void ajouterPomme() {
     srand(time(NULL));
+
     while (plateau[posY_pomme][posX_pomme] != ' ')
     {
-        posX_pomme = rand() % (LARGEUR_ECRAN - 2) + 1;
-        posY_pomme = rand() % (HAUTEUR_ECRAN - 2) + 1;
+        posX_pomme = rand() % (LARGEURMAX - 2) + 1;
+        posY_pomme = rand() % (HAUTEURMAX - 2) + 1;
     }
     plateau[posY_pomme][posX_pomme] = POMME;
 }
 
-/* Fait progresser le serpent */
-void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *pommeMangee, int *tailleSerpent) {
-    int ancienneQueueX = lesX[*tailleSerpent - 1];
-    int ancienneQueueY = lesY[*tailleSerpent - 1];
-    plateau[ancienneQueueY][ancienneQueueX] = ' ';
+void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *pommeMangee) {
+    int X = lesX[tailleSerpent - 1];
+    int Y = lesY[tailleSerpent - 1];
+    plateau[Y][X] = ' ';
 
-    for (int i = *tailleSerpent - 1; i > 0; i--) 
+    for (int i = tailleSerpent - 1; i > 0; i--) 
     {
         lesX[i] = lesX[i - 1];
         lesY[i] = lesY[i - 1];
     }
     
-    if (direction == DROITE) lesX[0] = (lesX[0] + 1);
-    if (direction == GAUCHE) lesX[0] = (lesX[0] - 1);
-    if (direction == HAUT) lesY[0] = (lesY[0] - 1);
-    if (direction == BAS) lesY[0] = (lesY[0] + 1);
+    if (direction == DROITE) lesX[0] = lesX[0] + 1;
+    if (direction == GAUCHE) lesX[0] = lesX[0] - 1;
+    if (direction == HAUT) lesY[0] = lesY[0] - 1;
+    if (direction == BAS) lesY[0] = lesY[0] + 1;
 
     // Gestion des issues
-    if (lesX[0] == 0) lesX[0] = LARGEUR_ECRAN - 2;
-    if (lesX[0] == LARGEUR_ECRAN - 1) lesX[0] = 1;
-    if (lesY[0] == 0) lesY[0] = HAUTEUR_ECRAN - 2;
-    if (lesY[0] == HAUTEUR_ECRAN - 1) lesY[0] = 1;
+    if (lesX[0] == 0 && lesY[0] == HAUTEURMAX / 2) lesX[0] = LARGEURMAX - 2; // Issue gauche
+    else if (lesX[0] == LARGEURMAX - 1 && lesY[0] == HAUTEURMAX / 2) lesX[0] = 1; // Issue droite
+    else if (lesY[0] == 0 && lesX[0] == LARGEURMAX / 2) lesY[0] = HAUTEURMAX - 2; // Issue haut
+    else if (lesY[0] == HAUTEURMAX - 1 && lesX[0] == LARGEURMAX / 2) lesY[0] = 1; // Issue bas
 
-    // Vérification des collisions
+    // Vérification des collisions avec les bordures non issues
+    if ((lesX[0] == 0 && lesY[0] != HAUTEURMAX / 2) || 
+        (lesX[0] == LARGEURMAX - 1 && lesY[0] != HAUTEURMAX / 2) || 
+        (lesY[0] == 0 && lesX[0] != LARGEURMAX / 2) || 
+        (lesY[0] == HAUTEURMAX - 1 && lesX[0] != LARGEURMAX / 2)) 
+    {
+        *collision = true;
+        return;
+    }
+
+    // Vérification des collisions avec le corps ou les obstacles
     *collision = plateau[lesY[0]][lesX[0]] == '#' || plateau[lesY[0]][lesX[0]] == CORPS;
 
     // Vérification de la pomme
     if (lesX[0] == posX_pomme && lesY[0] == posY_pomme) {
         *pommeMangee = true;
-        (*tailleSerpent)++;
+        tailleSerpent++;
     } else {
         *pommeMangee = false;
     }
@@ -172,13 +190,13 @@ void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *p
 
 
 /* Dessine le plateau avec le serpent */
-void dessinerPlateau(int lesX[], int lesY[], int tailleSerpent) {
+void dessinerPlateau(int lesX[], int lesY[]) {
     for (int i = 0; i < tailleSerpent; i++) {
         plateau[lesY[i]][lesX[i]] = (i == 0) ? TETE : CORPS;
     }
     system("clear");
-    for (int i = 0; i < HAUTEUR_ECRAN; i++) {
-        for (int j = 0; j < LARGEUR_ECRAN; j++) {
+    for (int i = 0; i < HAUTEURMAX; i++) {
+        for (int j = 0; j < LARGEURMAX; j++) {
             putchar(plateau[i][j]);
         }
         putchar('\n');
@@ -251,22 +269,22 @@ void placerPaves() {
 
     // Définir une zone sécurisée autour de la position de départ du serpent
 
-    for (int k = 0; k < NB_PAVES; k++) 
+    for (int k = 0; k < NBREPAVE; k++) 
     {
-        int x = rand() % (LARGEUR_ECRAN - 10) + 2;
-        int y = rand() % (HAUTEUR_ECRAN - 10) + 2;
-        while (y > START_SAFE_ZONE_Y 
-            && y + END_SAFE_ZONE_Y 
-            && x > START_SAFE_ZONE_X 
-            && x < END_SAFE_ZONE_X)
+        int x = rand() % (LARGEURMAX - 10) + 2;
+        int y = rand() % (HAUTEURMAX - 10) + 2;
+        while (y > STARTSAFEZONEY 
+            && y + ENDSAFEZONEY 
+            && x > STARTSAFEZONEX 
+            && x < ENDSAFEZONEX)
         {
-            x = rand() % (LARGEUR_ECRAN - 10) + 2;
-            y = rand() % (HAUTEUR_ECRAN - 10) + 2;
+            x = rand() % (LARGEURMAX - 10) + 2;
+            y = rand() % (HAUTEURMAX - 10) + 2;
         }
 
-        for (int i = 0; i < TAILLE_PAVES; i++) 
+        for (int i = 0; i < TAILLEPAVE; i++) 
         {
-            for (int j = 0; j < TAILLE_PAVES; j++) 
+            for (int j = 0; j < TAILLEPAVE; j++) 
             {
                 plateau[y + i][x + j] = '#';
             }

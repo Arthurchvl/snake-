@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/arthurchauvel/Desktop/cours/SAES/S101/V4/output/test10'
+relocations:     []
+...
