@@ -165,7 +165,9 @@ void initPlateau(int lesX[], int lesY[]) {
             }
         }
     }
-    for (int i = 0; i < NBREPAVES; i++) initPaves(lesX, lesY);
+    for (int i = 0; i < NBREPAVES; i++){
+        initPaves(lesX, lesY);
+    }
 }
 
 /**

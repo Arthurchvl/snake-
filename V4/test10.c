@@ -1,17 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <unistd.h>
-#include <time.h>
-#include <termios.h>
-#include <fcntl.h>
-
 /**
  * @file snake_game.c
  * @brief Jeu du serpent en mode console.
- * @author [Votre Nom]
- * @version 1.0
- * @date [Date du jour]
+ * @author Arthur CHAUVEL
+ * @version 4.8.4
+ * @date 24/11/24
  *
  * Ce programme implémente un jeu du serpent. Le joueur contrôle un serpent qui se déplace
  * sur un plateau. Le but est de manger un certain nombre de pommes tout en évitant les obstacles
@@ -20,50 +12,105 @@
  * ou si le joueur déclare forfait.
  */
 
-/* Définition des constantes */
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <time.h>
+#include <termios.h>
+#include <fcntl.h>
+
+/*****************************************************
+*DEFINITIONS CONSANTES/ VARIABLES GLOBALES/ FONCTIONS*
+*****************************************************/
+
+
+/** @brief Définition des constantes. */
+
+/** Largeur maximale du plateau de jeu. */
 #define LARGEURMAX 80
+/** Hauteur maximale du plateau de jeu. */
 #define HAUTEURMAX 40
-const int TAILLESERPENT = 10;
-const int NBREPAVE = 4;
-const int TAILLEPAVE = 5;
-const int TEMPORISATION = 200000;
-const int NBREPOMMESFINJEU = 10;
-const int STARTSAFEZONEX = 15;
-const int ENDSAFEZONEX = 48;
-const int STARTSAFEZONEY = 5;
-const int ENDSAFEZONEY = 7;
-const int MAXTAILLESERPENT = 100;
+/** Coordonnée minimale utilisée sur le plateau. */
+const int COORDMIN = 1; 
+/** Taille initiale du serpent. */
+const int TAILLESERPENT = 10; 
+/** Nombre de pavés d'obstacles à placer. */
+const int NBREPAVE = 4; 
+/** Taille d'un pavé d'obstacle. */
+const int TAILLEPAVE = 5; 
+/** Temps de pause entre deux déplacements en microsecondes. */
+const int TEMPORISATION = 200000; 
+/** Nombre de pommes à manger pour gagner. */
+const int NBREPOMMESFINJEU = 10; 
+/** Coordonnée X de départ du serpent. */
+const int COORDXDEPART = 40; 
+/** Coordonnée Y de départ du serpent. */
+const int COORDYDEPART = 20; 
+/** Début de la zone de sécurité en X. */
+const int STARTSAFEZONEX = 22; 
+/** Fin de la zone de sécurité en X. */
+const int ENDSAFEZONEX = 43; 
+/** Début de la zone de sécurité en Y. */
+const int STARTSAFEZONEY = 12; 
+ /** Fin de la zone de sécurité en Y. */
+const int ENDSAFEZONEY = 23;
+/** Augmentation de la vitesse après avoir mangé une pomme. */
+const int AUGMENTATIONVITESSE = 10000; 
+/** Taille maximale que le serpent peut atteindre. */
+const int MAXTAILLESERPENT = TAILLESERPENT + NBREPOMMESFINJEU + 1; 
+/** Caractère représentant la tête du serpent. */
+const char TETE = 'O'; 
+/** Caractère représentant le corps du serpent. */
+const char CORPS = 'X'; 
+/** Caractère représentant une pomme. */
+const char POMME = '6'; 
+/** Caractère permettant d'arrêter le jeu. */
+const char ARRET = 'a'; 
+/** Direction : droite. */
+const char DROITE = 'd'; 
+/** Direction : gauche. */
+const char GAUCHE = 'q'; 
+/** Direction : haut. */
+const char HAUT = 'z'; 
+/** Direction : bas. */
+const char BAS = 's'; 
+/** Caractère représentant une case vide. */
+const char VIDE = ' '; 
+/** Caractère représentant une bordure ou un obstacle. */
+const char CARBORDURE = '#'; 
 
-/* Définition des caractères utilisés */
-const char TETE = 'O';
-const char CORPS = 'X';
-const char POMME = '6';
-const char ARRET = 'a';
-const char DROITE = 'd';
-const char GAUCHE = 'q';
-const char HAUT = 'z';
-const char BAS = 's';
+/** @brief Plateau de jeu. */
+char plateau[HAUTEURMAX +1][LARGEURMAX +1];
 
-/* Plateau de jeu */
-char plateau[HAUTEURMAX][LARGEURMAX];
+
+/** @brief Variables globales modifiables en cours de jeu. */
 int tailleSerpent = TAILLESERPENT;
+int temporisation = TEMPORISATION;
 
-/* Position de la pomme */
+/** @brief Position de la pomme. */
 int posX_pomme = -1, posY_pomme = -1;
 
-/* Déclaration des fonctions */
+void gotoXY(int x, int y);
 void disableEcho();
 void enableEcho();
 int kbhit();
+void afficher(int x, int y, char c);
+void effacer(int x, int y);
 void dessinerPlateau(int lesX[], int lesY[]);
 void initPlateau();
 void placerPaves();
 void ajouterPomme();
 void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *pommeMangee);
 
+/*****************************************************
+*               PROGRAMME PRINCIPAL                  *
+*****************************************************/
+
+
 /**
- * @brief Entrée principale du programme.
- * @return EXIT_SUCCESS si le programme se termine correctement.
+ * @brief Programme principal gérant le déroulement du jeu.
+ * @return Code de sortie du programme.
  */
 int main() {
     int lesX[MAXTAILLESERPENT] = {40, 39, 38, 37, 36, 35, 34, 33, 32, 31};
@@ -90,18 +137,22 @@ int main() {
                 (touche == BAS && direction != HAUT)) {
                 direction = touche;
             }
-            if (touche == ARRET) {
-                forfait = true;
-                break;
+            if (touche == ARRET){
+            forfait = true;
+            break;
             }
         }
+
         progresser(lesX, lesY, direction, &collision, &pommeMangee);
+
         if (pommeMangee) {
             pommesMangees++;
+            temporisation = temporisation - AUGMENTATIONVITESSE;
+            tailleSerpent++;
             ajouterPomme();
         }
         dessinerPlateau(lesX, lesY);
-        usleep(TEMPORISATION - pommesMangees * 10000); /** Augmenter la vitesse progressivement */
+        usleep(temporisation);
     }
 
     enableEcho();
@@ -109,15 +160,42 @@ int main() {
     if (collision) {
         system("clear");
         printf("Collision détectée. Vous avez perdu.\n");
-    } else if (pommesMangees >= NBREPOMMESFINJEU) {
+    }
+    else if (pommesMangees == NBREPOMMESFINJEU) {
         system("clear");
         printf("Vous avez gagné. Félicitations !\n");
-    } else if (forfait) {
+    } 
+    else if (forfait){
         system("clear");
         printf("Vous avez déclaré forfait. Dommage !\n");
     }
 
     return EXIT_SUCCESS;
+}
+
+/*****************************************************
+*               FONCTIONS/PROCEDURES                *
+*****************************************************/
+
+
+/**
+ * @brief Affiche un caractère à une position donnée sur le terminal.
+ * @param x Coordonnée en X.
+ * @param y Coordonnée en Y.
+ * @param c Caractère à afficher.
+ */
+void afficher(int x, int y, char c) {
+    gotoXY(x, y);
+    printf("%c", c);
+}
+
+/**
+ * @brief Efface un caractère à une position donnée sur le terminal.
+ * @param x Coordonnée en X.
+ * @param y Coordonnée en Y.
+ */
+void effacer(int x, int y) {
+    afficher(x, y, VIDE);
 }
 
 /**
@@ -127,11 +205,11 @@ void initPlateau() {
     for (int i = 0; i < HAUTEURMAX; i++) {
         for (int j = 0; j < LARGEURMAX; j++) {
             if (i == 0 || i == HAUTEURMAX - 1) {
-                plateau[i][j] = (j == LARGEURMAX / 2) ? ' ' : '#';
+                plateau[i][j] = (j == LARGEURMAX / 2) ? VIDE : CARBORDURE;
             } else if (j == 0 || j == LARGEURMAX - 1) {
-                plateau[i][j] = (i == HAUTEURMAX / 2) ? ' ' : '#';
+                plateau[i][j] = (i == HAUTEURMAX / 2) ? VIDE : CARBORDURE;
             } else {
-                plateau[i][j] = ' ';
+                plateau[i][j] = VIDE;
             }
         }
     }
@@ -142,7 +220,7 @@ void initPlateau() {
  */
 void ajouterPomme() {
     srand(time(NULL));
-    while (plateau[posY_pomme][posX_pomme] != ' ') {
+    while (plateau[posY_pomme][posX_pomme] != VIDE) {
         posX_pomme = rand() % (LARGEURMAX - 2) + 1;
         posY_pomme = rand() % (HAUTEURMAX - 2) + 1;
     }
@@ -164,7 +242,7 @@ void placerPaves() {
 
         for (int i = 0; i < TAILLEPAVE; i++) {
             for (int j = 0; j < TAILLEPAVE; j++) {
-                plateau[y + i][x + j] = '#';
+                plateau[y + i][x + j] = CARBORDURE;
             }
         }
     }
@@ -190,16 +268,16 @@ void dessinerPlateau(int lesX[], int lesY[]) {
 
 /**
  * @brief Fait progresser le serpent d'une étape.
- * @param lesX Tableau des coordonnées x du serpent.
- * @param lesY Tableau des coordonnées y du serpent.
- * @param direction Direction du mouvement.
- * @param collision Indique si une collision a eu lieu.
+ * @param lesX Tableau des coordonnées X du serpent.
+ * @param lesY Tableau des coordonnées Y du serpent.
+ * @param direction Direction actuelle du serpent.
+ * @param collision Indique si une collision a été détectée.
  * @param pommeMangee Indique si une pomme a été mangée.
  */
 void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *pommeMangee) {
     int X = lesX[tailleSerpent - 1];
     int Y = lesY[tailleSerpent - 1];
-    plateau[Y][X] = ' ';
+    plateau[Y][X] = VIDE;
 
     for (int i = tailleSerpent - 1; i > 0; i--) {
         lesX[i] = lesX[i - 1];
@@ -216,13 +294,23 @@ void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *p
     else if (lesY[0] == 0 && lesX[0] == LARGEURMAX / 2) lesY[0] = HAUTEURMAX - 2;
     else if (lesY[0] == HAUTEURMAX - 1 && lesX[0] == LARGEURMAX / 2) lesY[0] = 1;
 
-    *collision = plateau[lesY[0]][lesX[0]] == '#' || plateau[lesY[0]][lesX[0]] == CORPS;
+    *collision = plateau[lesY[0]][lesX[0]] == CARBORDURE || plateau[lesY[0]][lesX[0]] == CORPS;
     *pommeMangee = (lesX[0] == posX_pomme && lesY[0] == posY_pomme);
 }
 
-/**
- * @brief Désactive l'écho des touches du clavier.
+/*****************************************************
+*            FONCTIONS "BOITES NOIRES"               *
+*****************************************************/
+/** Les fonctions "boites noires" sont des fonctions qui nous ont été données.
+ * Il n'y a donc aucun commentaires puisqu'il nous a pas été demandé de les comprendre,
+ * et donc il n'est pas nécéssaire de les commenter.
  */
+
+
+void gotoXY(int x, int y) {
+    printf("\033[%d;%df", y, x);
+}
+
 void disableEcho() {
     struct termios tty;
     tcgetattr(STDIN_FILENO, &tty);
@@ -230,9 +318,6 @@ void disableEcho() {
     tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 }
 
-/**
- * @brief Réactive l'écho des touches du clavier.
- */
 void enableEcho() {
     struct termios tty;
     tcgetattr(STDIN_FILENO, &tty);
@@ -240,10 +325,6 @@ void enableEcho() {
     tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 }
 
-/**
- * @brief Vérifie si une touche a été pressée.
- * @return 1 si une touche est pressée, 0 sinon.
- */
 int kbhit() {
     struct termios oldt, newt;
     int ch, oldf;
@@ -266,4 +347,4 @@ int kbhit() {
         return 1;
     }
     return 0;
-}
+} 

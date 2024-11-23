@@ -30,6 +30,7 @@ const char BAS = 's';
 
 
 /* Déclaration des fonctions existantes */
+void gotoXY(int x, int y);
 void disableEcho();
 void enableEcho();
 int kbhit();
