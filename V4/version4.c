@@ -5,10 +5,14 @@
  * @version 4.8.4
  * @date 24/11/24
  *
- * Ce programme implémente un jeu du serpent. Le joueur contrôle un serpent qui se déplace
- * sur un plateau. Le but est de manger un certain nombre de pommes tout en évitant les obstacles
- * et les collisions avec les bordures (sauf les issues) ou avec le corps du serpent.
- * Le jeu se termine en cas de collision, de victoire (toutes les pommes mangées),
+ * Ce programme implémente un jeu du serpent.
+ * Le joueur contrôle un serpent qui se déplace sur un plateau.
+ * Le but est de manger un certain nombre de pommes
+ * tout en évitant les obstacles
+ * et les collisions avec les bordures (sauf les issues)
+ * ou avec le corps du serpent.
+ * Le jeu se termine en cas de collision, de victoire
+ * (toutes les pommes mangées),
  * ou si le joueur déclare forfait.
  */
 
@@ -39,7 +43,7 @@ const int TAILLESERPENT = 10;
 const int NBREPAVE = 4; 
 /** Taille d'un pavé d'obstacle. */
 const int TAILLEPAVE = 5; 
-/** Temps de pause entre deux déplacements en microsecondes. */
+/** Temps de pause entre deux déplacements */
 const int TEMPORISATION = 200000; 
 /** Nombre de pommes à manger pour gagner. */
 const int NBREPOMMESFINJEU = 10; 
@@ -228,7 +232,8 @@ void ajouterPomme() {
 }
 
 /**
- * @brief Place des pavés d'obstacles sur le plateau en dehors de la zone de sécurité.
+ * @brief Place des pavés d'obstacles sur le plateau 
+ * en dehors de la zone de sécurité.
  */
 void placerPaves() {
     srand(time(NULL));
@@ -294,7 +299,8 @@ void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *p
     else if (lesY[0] == 0 && lesX[0] == LARGEURMAX / 2) lesY[0] = HAUTEURMAX - 2;
     else if (lesY[0] == HAUTEURMAX - 1 && lesX[0] == LARGEURMAX / 2) lesY[0] = 1;
 
-    *collision = plateau[lesY[0]][lesX[0]] == CARBORDURE || plateau[lesY[0]][lesX[0]] == CORPS;
+    *collision = plateau[lesY[0]][lesX[0]] == CARBORDURE || 
+        plateau[lesY[0]][lesX[0]] == CORPS;
     *pommeMangee = (lesX[0] == posX_pomme && lesY[0] == posY_pomme);
 }
 
@@ -302,7 +308,8 @@ void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *p
 *            FONCTIONS "BOITES NOIRES"               *
 *****************************************************/
 /** Les fonctions "boites noires" sont des fonctions qui nous ont été données.
- * Il n'y a donc aucun commentaires puisqu'il nous a pas été demandé de les comprendre,
+ * Il n'y a donc aucun commentaires 
+ * puisqu'il nous a pas été demandé de les comprendre,
  * et donc il n'est pas nécéssaire de les commenter.
  */
 
