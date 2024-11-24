@@ -58,7 +58,7 @@ const int ENDSAFEZONEY = 23;
 /** Augmentation de la vitesse après avoir mangé une pomme. */
 const int AUGMENTATIONVITESSE = 10000; 
 /** Taille maximale que le serpent peut atteindre. */
-const int MAXTAILLESERPENT = TAILLESERPENT + NBREPOMMESFINJEU + 1; 
+#define MAXTAILLESERPENT 100 
 /** Caractère représentant la tête du serpent. */
 const char TETE = 'O'; 
 /** Caractère représentant le corps du serpent. */
