@@ -56,7 +56,7 @@ const int STARTSAFEZONEY = 12;
  /** Fin de la zone de sécurité en Y. */
 const int ENDSAFEZONEY = 23;
 /** Augmentation de la vitesse après avoir mangé une pomme. */
-const int AUGMENTATIONVITESSE = 10000; 
+const int AUGMENTATIONVITESSE = 15000; 
 /** Taille maximale que le serpent peut atteindre. */
 #define MAXTAILLESERPENT 100 
 /** Caractère représentant la tête du serpent. */
