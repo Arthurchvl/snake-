@@ -6,7 +6,7 @@
  * @date 24/11/24
  *
  * Ce programme implémente un jeu du serpent.
- * Le joueur contrôle un serpent qui se déplace sur un plateau.
+ * Le joueur contrôle un serpent qui se déplace sur un plateau.AZERTYUIOPAZERTYUIOP
  * Le but est de manger un certain nombre de pommes
  * tout en évitant les obstacles
  * et les collisions avec les bordures (sauf les issues)
@@ -92,6 +92,8 @@ char plateau[HAUTEURMAX +1][LARGEURMAX +1];
 int tailleSerpent = TAILLESERPENT;
 int temporisation = TEMPORISATION;
 
+int score = 0;
+
 /** @brief Position de la pomme. */
 int posX_pomme = -1, posY_pomme = -1;
 
@@ -99,6 +101,7 @@ void gotoXY(int x, int y);
 void disableEcho();
 void enableEcho();
 int kbhit();
+void afficherScore();
 void afficher(int x, int y, char c);
 void effacer(int x, int y);
 void dessinerPlateau(int lesX[], int lesY[]);
@@ -117,6 +120,8 @@ void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *p
  * @return Code de sortie du programme.
  */
 int main() {
+
+    /** Déclaration des variables */
     int lesX[MAXTAILLESERPENT] = {40, 39, 38, 37, 36, 35, 34, 33, 32, 31};
     int lesY[MAXTAILLESERPENT] = {20, 20, 20, 20, 20, 20, 20, 20, 20, 20};
     char direction = DROITE;
@@ -125,6 +130,9 @@ int main() {
     bool forfait = false;
     int pommesMangees = 0;
 
+    /** Appel des fonctions pour l'affichage du plateeau, 
+     * des pavés 
+     * et de la première pomme */
     initPlateau();
     placerPaves();
     ajouterPomme();
@@ -132,6 +140,7 @@ int main() {
 
     disableEcho();
 
+    /** Boucle principale */
     while (!collision && pommesMangees < NBREPOMMESFINJEU) {
         if (kbhit()) {
             char touche = getchar();
@@ -148,19 +157,21 @@ int main() {
         }
 
         progresser(lesX, lesY, direction, &collision, &pommeMangee);
+        afficherScore();
 
         if (pommeMangee) {
             pommesMangees++;
             temporisation = temporisation - AUGMENTATIONVITESSE;
             tailleSerpent++;
+            score++;
             ajouterPomme();
         }
         dessinerPlateau(lesX, lesY);
         usleep(temporisation);
     }
-
     enableEcho();
 
+    /** Phrase de fin de jeu en fonction de l'issue de la partie */
     if (collision) {
         system("clear");
         printf("Collision détectée. Vous avez perdu.\n");
@@ -181,6 +192,9 @@ int main() {
 *               FONCTIONS/PROCEDURES                *
 *****************************************************/
 
+void afficherScore() {
+    printf("Score: %d\n", score);
+}
 
 /**
  * @brief Affiche un caractère à une position donnée sur le terminal.
@@ -189,6 +203,9 @@ int main() {
  * @param c Caractère à afficher.
  */
 void afficher(int x, int y, char c) {
+    /** Sep placer aux coordonées x,y du terminal
+     * puis écrire le caractère voulu à la bonne position
+     */
     gotoXY(x, y);
     printf("%c", c);
 }
@@ -199,6 +216,9 @@ void afficher(int x, int y, char c) {
  * @param y Coordonnée en Y.
  */
 void effacer(int x, int y) {
+    /** remplace le caractère present aux coordonnées x,y 
+     * par du vide
+     */
     afficher(x, y, VIDE);
 }
 
@@ -206,6 +226,10 @@ void effacer(int x, int y) {
  * @brief Initialise le plateau avec les bordures et les issues.
  */
 void initPlateau() {
+    /** Double boucle for permettant de se déplacer sur la bordure du tableau 
+     * en largeur et en hauteur et afficher la bordure 
+     * sauf si le curseur est au milieu de la bordure
+     */
     for (int i = 0; i < HAUTEURMAX; i++) {
         for (int j = 0; j < LARGEURMAX; j++) {
             if (i == 0 || i == HAUTEURMAX - 1) {
@@ -225,9 +249,12 @@ void initPlateau() {
 void ajouterPomme() {
     srand(time(NULL));
     while (plateau[posY_pomme][posX_pomme] != VIDE) {
-        posX_pomme = rand() % (LARGEURMAX - 2) + 1;
-        posY_pomme = rand() % (HAUTEURMAX - 2) + 1;
+        /** génère aléatoirement une coordonnée X */
+        posX_pomme = rand() % (LARGEURMAX - 2) + 1; 
+        /** génère aléatoirment une coordonnées Y */
+        posY_pomme = rand() % (HAUTEURMAX - 2) + 1; 
     }
+    /** place la pomme si les coordonnées sont valides */
     plateau[posY_pomme][posX_pomme] = POMME;
 }
 
@@ -240,11 +267,15 @@ void placerPaves() {
     for (int k = 0; k < NBREPAVE; k++) {
         int x, y;
         do {
-            x = rand() % (LARGEURMAX - 10) + 2;
+            /** génère aléatoirement une coordonnée X */
+            x = rand() % (LARGEURMAX - 10) + 2; 
+            /** génère aléatoirement une coordonnées Y */
             y = rand() % (HAUTEURMAX - 10) + 2;
-        } while (x > STARTSAFEZONEX && x < ENDSAFEZONEX &&
+        } while (x > STARTSAFEZONEX && x < ENDSAFEZONEX && 
                  y > STARTSAFEZONEY && y < ENDSAFEZONEY);
-
+        /** vérifie que le pavé ne va pas chevaucher le serpent */
+        
+        /** place le pavé si les coordonnées sont valide */
         for (int i = 0; i < TAILLEPAVE; i++) {
             for (int j = 0; j < TAILLEPAVE; j++) {
                 plateau[y + i][x + j] = CARBORDURE;
@@ -259,10 +290,12 @@ void placerPaves() {
  * @param lesY Tableau des coordonnées y du serpent.
  */
 void dessinerPlateau(int lesX[], int lesY[]) {
+    /** affiche le serpent dans le terminal */
     for (int i = 0; i < tailleSerpent; i++) {
         plateau[lesY[i]][lesX[i]] = (i == 0) ? TETE : CORPS;
     }
     system("clear");
+    /** affiche le plateau déja initialisé dans le terminal de jeu */
     for (int i = 0; i < HAUTEURMAX; i++) {
         for (int j = 0; j < LARGEURMAX; j++) {
             putchar(plateau[i][j]);
@@ -280,6 +313,9 @@ void dessinerPlateau(int lesX[], int lesY[]) {
  * @param pommeMangee Indique si une pomme a été mangée.
  */
 void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *pommeMangee) {
+    /** effacer le dernier segment du seprent
+     * pour monter qu'il avance
+     */
     int X = lesX[tailleSerpent - 1];
     int Y = lesY[tailleSerpent - 1];
     plateau[Y][X] = VIDE;
@@ -288,12 +324,14 @@ void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *p
         lesX[i] = lesX[i - 1];
         lesY[i] = lesY[i - 1];
     }
-
+    /** change la coordonnée adéquate du seprent en fonction de la  direction*/
     if (direction == DROITE) lesX[0]++;
     if (direction == GAUCHE) lesX[0]--;
     if (direction == HAUT) lesY[0]--;
     if (direction == BAS) lesY[0]++;
 
+    /** gestion de la réapparition du seprent 
+     * lorsqu'il emprunte une issue */
     if (lesX[0] == 0 && lesY[0] == HAUTEURMAX / 2) lesX[0] = LARGEURMAX - 2;
     else if (lesX[0] == LARGEURMAX - 1 && lesY[0] == HAUTEURMAX / 2) lesX[0] = 1;
     else if (lesY[0] == 0 && lesX[0] == LARGEURMAX / 2) lesY[0] = HAUTEURMAX - 2;
@@ -313,11 +351,16 @@ void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *p
  * et donc il n'est pas nécéssaire de les commenter.
  */
 
-
+/** @brief permet de se déplacer dans le terminal 
+ * aux coordonnées entréee en paramètre */
 void gotoXY(int x, int y) {
     printf("\033[%d;%df", y, x);
 }
 
+/** "désactive l'echo" 
+ * les caractère tapés au clavier ne s'affiche plus
+ * dans le terminal.
+ */
 void disableEcho() {
     struct termios tty;
     tcgetattr(STDIN_FILENO, &tty);
@@ -325,6 +368,10 @@ void disableEcho() {
     tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 }
 
+/** "désactive l'echo" 
+ * les caractère tapés au clavier ne s'affiche plus
+ * dans le terminal.
+ */
 void enableEcho() {
     struct termios tty;
     tcgetattr(STDIN_FILENO, &tty);
