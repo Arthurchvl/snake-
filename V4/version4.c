@@ -92,7 +92,6 @@ char plateau[HAUTEURMAX +1][LARGEURMAX +1];
 int tailleSerpent = TAILLESERPENT;
 int temporisation = TEMPORISATION;
 
-int score = 0;
 
 /** @brief Position de la pomme. */
 int posX_pomme = -1, posY_pomme = -1;
@@ -101,7 +100,6 @@ void gotoXY(int x, int y);
 void disableEcho();
 void enableEcho();
 int kbhit();
-void afficherScore();
 void afficher(int x, int y, char c);
 void effacer(int x, int y);
 void dessinerPlateau(int lesX[], int lesY[]);
@@ -157,13 +155,11 @@ int main() {
         }
 
         progresser(lesX, lesY, direction, &collision, &pommeMangee);
-        afficherScore();
 
         if (pommeMangee) {
             pommesMangees++;
             temporisation = temporisation - AUGMENTATIONVITESSE;
             tailleSerpent++;
-            score++;
             ajouterPomme();
         }
         dessinerPlateau(lesX, lesY);
@@ -192,9 +188,6 @@ int main() {
 *               FONCTIONS/PROCEDURES                *
 *****************************************************/
 
-void afficherScore() {
-    printf("Score: %d\n", score);
-}
 
 /**
  * @brief Affiche un caractère à une position donnée sur le terminal.
@@ -345,7 +338,8 @@ void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *p
 /*****************************************************
 *            FONCTIONS "BOITES NOIRES"               *
 *****************************************************/
-/** Les fonctions "boites noires" sont des fonctions qui nous ont été données.
+
+/** @attention Les fonctions "boites noires" sont des fonctions qui nous ont été données.
  * Il n'y a donc aucun commentaires 
  * puisqu'il nous a pas été demandé de les comprendre,
  * et donc il n'est pas nécéssaire de les commenter.
@@ -357,7 +351,7 @@ void gotoXY(int x, int y) {
     printf("\033[%d;%df", y, x);
 }
 
-/** "désactive l'echo" 
+/** @brief "désactive l'echo" 
  * les caractère tapés au clavier ne s'affiche plus
  * dans le terminal.
  */
@@ -368,7 +362,7 @@ void disableEcho() {
     tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 }
 
-/** "désactive l'echo" 
+/** @brief "désactive l'echo" 
  * les caractère tapés au clavier ne s'affiche plus
  * dans le terminal.
  */
@@ -379,6 +373,10 @@ void enableEcho() {
     tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 }
 
+/** @brief "désactive l'echo" 
+ * les caractère tapés au clavier ne s'affiche plus
+ * dans le terminal.
+ */
 int kbhit() {
     struct termios oldt, newt;
     int ch, oldf;
