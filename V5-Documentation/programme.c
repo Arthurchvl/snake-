@@ -2,8 +2,8 @@
  * @file snake_game.c
  * @brief Jeu du serpent en mode console.
  * @author Arthur CHAUVEL
- * @version 4.8.4
- * @date 24/11/24
+ * @version 5
+ * @date 01/12/24
  *
  * Ce programme implémente un jeu du serpent.
  * Le joueur contrôle un serpent qui se déplace sur un plateau.AZERTYUIOPAZERTYUIOP
