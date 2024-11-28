@@ -6,15 +6,19 @@
  * @date 01/12/24
  *
  * Ce programme implémente un jeu du serpent.
- * Le joueur contrôle un serpent qui se déplace sur un plateau.AZERTYUIOPAZERTYUIOP
+ * Le joueur contrôle un serpent qui se déplace sur un plateau.
  * Le but est de manger un certain nombre de pommes
  * tout en évitant les obstacles
- * et les collisions avec les bordures (sauf les issues)
+ * et les collisions avec les bordures (sauf les issues) 
  * ou avec le corps du serpent.
- * Le jeu se termine en cas de collision, de victoire
- * (toutes les pommes mangées),
+ * Le jeu se termine en cas de collision, de victoire (toutes les pommes mangées),
  * ou si le joueur déclare forfait.
  */
+
+/*****************************************************
+*               IMPORT DES BIBLIOTHEQUES             *
+*****************************************************/
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -96,17 +100,17 @@ int temporisation = TEMPORISATION;
 /** @brief Position de la pomme. */
 int posX_pomme = -1, posY_pomme = -1;
 
+void afficher(int x, int y, char c);
+void effacer(int x, int y);
+void initPlateau();
+void ajouterPomme();
+void placerPaves();
+void dessinerPlateau(int lesX[], int lesY[]);
+void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *pommeMangee);
 void gotoXY(int x, int y);
 void disableEcho();
 void enableEcho();
 int kbhit();
-void afficher(int x, int y, char c);
-void effacer(int x, int y);
-void dessinerPlateau(int lesX[], int lesY[]);
-void initPlateau();
-void placerPaves();
-void ajouterPomme();
-void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *pommeMangee);
 
 /*****************************************************
 *               PROGRAMME PRINCIPAL                  *
@@ -128,7 +132,7 @@ int main() {
     bool forfait = false;
     int pommesMangees = 0;
 
-    /** Appel des fonctions pour l'affichage du plateeau, 
+    /** Appel des fonctions pour l'affichage du plateau, 
      * des pavés 
      * et de la première pomme */
     initPlateau();
@@ -155,7 +159,7 @@ int main() {
         }
 
         progresser(lesX, lesY, direction, &collision, &pommeMangee);
-
+        /** gestion des modification lorqu'une pomme est mangée */
         if (pommeMangee) {
             pommesMangees++;
             temporisation = temporisation - AUGMENTATIONVITESSE;
@@ -168,15 +172,15 @@ int main() {
     enableEcho();
 
     /** Phrase de fin de jeu en fonction de l'issue de la partie */
-    if (collision) {
+    if (collision) { /** si collision */
         system("clear");
         printf("Collision détectée. Vous avez perdu.\n");
     }
-    else if (pommesMangees == NBREPOMMESFINJEU) {
+    else if (pommesMangees == NBREPOMMESFINJEU) { /** si victoire */
         system("clear");
         printf("Vous avez gagné. Félicitations !\n");
     } 
-    else if (forfait){
+    else if (forfait){ /** si appui sur la touche de fin */
         system("clear");
         printf("Vous avez déclaré forfait. Dommage !\n");
     }
@@ -323,13 +327,13 @@ void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *p
     if (direction == HAUT) lesY[0]--;
     if (direction == BAS) lesY[0]++;
 
-    /** gestion de la réapparition du seprent 
-     * lorsqu'il emprunte une issue */
+    /** gestion de la réapparition du seprent lorsqu'il emprunte une issue */
     if (lesX[0] == 0 && lesY[0] == HAUTEURMAX / 2) lesX[0] = LARGEURMAX - 2;
     else if (lesX[0] == LARGEURMAX - 1 && lesY[0] == HAUTEURMAX / 2) lesX[0] = 1;
     else if (lesY[0] == 0 && lesX[0] == LARGEURMAX / 2) lesY[0] = HAUTEURMAX - 2;
     else if (lesY[0] == HAUTEURMAX - 1 && lesX[0] == LARGEURMAX / 2) lesY[0] = 1;
 
+    /** Gestion des collisions avec le plateau, les pavés et le corps du serpent */
     *collision = plateau[lesY[0]][lesX[0]] == CARBORDURE || 
         plateau[lesY[0]][lesX[0]] == CORPS;
     *pommeMangee = (lesX[0] == posX_pomme && lesY[0] == posY_pomme);
@@ -338,12 +342,6 @@ void progresser(int lesX[], int lesY[], char direction, bool *collision, bool *p
 /*****************************************************
 *            FONCTIONS "BOITES NOIRES"               *
 *****************************************************/
-
-/** @attention Les fonctions "boites noires" sont des fonctions qui nous ont été données.
- * Il n'y a donc aucun commentaires 
- * puisqu'il nous a pas été demandé de les comprendre,
- * et donc il n'est pas nécéssaire de les commenter.
- */
 
 /** @brief permet de se déplacer dans le terminal 
  * aux coordonnées entréee en paramètre */

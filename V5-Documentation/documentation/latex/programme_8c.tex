@@ -1,0 +1,515 @@
+\hypertarget{programme_8c}{}\doxysection{Référence du fichier programme.\+c}
+\label{programme_8c}\index{programme.c@{programme.c}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+{\ttfamily \#include $<$termios.\+h$>$}\newline
+{\ttfamily \#include $<$fcntl.\+h$>$}\newline
+Graphe des dépendances par inclusion de programme.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{programme_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{programme_8c_a82896ec76adf53723dc24e8937bc92f7}{HAUTEURMAX}}~40
+\item 
+\#define \mbox{\hyperlink{programme_8c_a12c7d2450de7cfa8e4733aec7854ec6c}{LARGEURMAX}}~80
+\begin{DoxyCompactList}\small\item\em Définition des constantes. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{programme_8c_ad796af4c153135b8169af42d8c9ba80e}{MAXTAILLESERPENT}}~100
+\end{DoxyCompactItemize}
+\doxysubsection*{Fonctions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{programme_8c_acba1573a94ed488d9e14fdaaf32d9bc4}{afficher}} (int x, int y, char c)
+\begin{DoxyCompactList}\small\item\em Affiche un caractère à une position donnée sur le terminal. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{programme_8c_a70488e1d20e26e127d98a583dc05fbda}{ajouter\+Pomme}} ()
+\begin{DoxyCompactList}\small\item\em Place une pomme sur une case vide aléatoire. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{programme_8c_a6fb5b246fe575a4274bb26dd4fcab9c1}{dessiner\+Plateau}} (int lesX\mbox{[}$\,$\mbox{]}, int lesY\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Dessine le plateau entier avec le serpent et les obstacles. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{programme_8c_a61de8c71dbb95a7120f58064957f9aec}{disable\+Echo}} ()
+\begin{DoxyCompactList}\small\item\em \char`\"{}désactive l\textquotesingle{}echo\char`\"{} les caractère tapés au clavier ne s\textquotesingle{}affiche plus dans le terminal. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{programme_8c_a4c792a17eb955a9e0fa6a033d335fc49}{effacer}} (int x, int y)
+\begin{DoxyCompactList}\small\item\em Efface un caractère à une position donnée sur le terminal. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{programme_8c_a2c742eced1c8bd5f0f6d42b13cacc651}{enable\+Echo}} ()
+\begin{DoxyCompactList}\small\item\em \char`\"{}désactive l\textquotesingle{}echo\char`\"{} les caractère tapés au clavier ne s\textquotesingle{}affiche plus dans le terminal. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{programme_8c_aa294b49bfcc17cf4b490fb020e359851}{goto\+XY}} (int x, int y)
+\begin{DoxyCompactList}\small\item\em permet de se déplacer dans le terminal aux coordonnées entréee en paramètre \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{programme_8c_aa25d21866cf984b531a24441b45ee482}{init\+Plateau}} ()
+\begin{DoxyCompactList}\small\item\em Initialise le plateau avec les bordures et les issues. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{programme_8c_ad5451da499ab9d3907da8dd7060ab677}{kbhit}} ()
+\begin{DoxyCompactList}\small\item\em \char`\"{}désactive l\textquotesingle{}echo\char`\"{} les caractère tapés au clavier ne s\textquotesingle{}affiche plus dans le terminal. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{programme_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
+\begin{DoxyCompactList}\small\item\em Programme principal gérant le déroulement du jeu. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{programme_8c_af7e104bcf76235784e38223388eea411}{placer\+Paves}} ()
+\begin{DoxyCompactList}\small\item\em Place des pavés d\textquotesingle{}obstacles sur le plateau en dehors de la zone de sécurité. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{programme_8c_a45b618a45f845ce7e1074a55638cab9f}{progresser}} (int lesX\mbox{[}$\,$\mbox{]}, int lesY\mbox{[}$\,$\mbox{]}, char direction, bool $\ast$collision, bool $\ast$pomme\+Mangee)
+\begin{DoxyCompactList}\small\item\em Fait progresser le serpent d\textquotesingle{}une étape. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const char \mbox{\hyperlink{programme_8c_a0ab0c701c49362998f081779cb5abb5a}{ARRET}} = \textquotesingle{}a\textquotesingle{}
+\item 
+const int \mbox{\hyperlink{programme_8c_ae0985b77c4be035174f1d0f3a0f6aeb0}{AUGMENTATIONVITESSE}} = 15000
+\item 
+const char \mbox{\hyperlink{programme_8c_af0301ed6bcd9642fe9fa234ee2222f22}{BAS}} = \textquotesingle{}s\textquotesingle{}
+\item 
+const char \mbox{\hyperlink{programme_8c_aefd89b3c50a75561ba19f87fdd066307}{CARBORDURE}} = \textquotesingle{}\#\textquotesingle{}
+\item 
+const int \mbox{\hyperlink{programme_8c_a98a86cba00e385e0a5698a45f97a75de}{COORDMIN}} = 1
+\item 
+const int \mbox{\hyperlink{programme_8c_a57b100261ceb92ddf3347cecf84dff0c}{COORDXDEPART}} = 40
+\item 
+const int \mbox{\hyperlink{programme_8c_a42704ca6f2bd302a67ac16bc96b39349}{COORDYDEPART}} = 20
+\item 
+const char \mbox{\hyperlink{programme_8c_adb033a6add57b80ca03364c8b5665528}{CORPS}} = \textquotesingle{}X\textquotesingle{}
+\item 
+const char \mbox{\hyperlink{programme_8c_a4438cde4b49ae29752ece8f6d806b139}{DROITE}} = \textquotesingle{}d\textquotesingle{}
+\item 
+const int \mbox{\hyperlink{programme_8c_aa31680343330331e45461732c7ba36fe}{ENDSAFEZONEX}} = 43
+\item 
+const int \mbox{\hyperlink{programme_8c_a86e258cafebb6532c91474922faac7e8}{ENDSAFEZONEY}} = 23
+\item 
+const char \mbox{\hyperlink{programme_8c_a88837b038b902b50afd93b98b0a36212}{GAUCHE}} = \textquotesingle{}q\textquotesingle{}
+\item 
+const char \mbox{\hyperlink{programme_8c_ad78c1a50d521d4395c404146ded8d3fe}{HAUT}} = \textquotesingle{}z\textquotesingle{}
+\item 
+const int \mbox{\hyperlink{programme_8c_aabe228a0e49b0ba57e59d002dbb2821c}{NBREPAVE}} = 4
+\item 
+const int \mbox{\hyperlink{programme_8c_acba221d3b78ee2b17bb14f9f39dd65d9}{NBREPOMMESFINJEU}} = 10
+\item 
+char \mbox{\hyperlink{programme_8c_a6d47cb290b2a494819a871bc24723b64}{plateau}} \mbox{[}\mbox{\hyperlink{programme_8c_a82896ec76adf53723dc24e8937bc92f7}{HAUTEURMAX}}+1\mbox{]}\mbox{[}\mbox{\hyperlink{programme_8c_a12c7d2450de7cfa8e4733aec7854ec6c}{LARGEURMAX}}+1\mbox{]}
+\begin{DoxyCompactList}\small\item\em Plateau de jeu. \end{DoxyCompactList}\item 
+const char \mbox{\hyperlink{programme_8c_a7bc4f7687fd1383548b7330e2873a810}{POMME}} = \textquotesingle{}6\textquotesingle{}
+\item 
+int \mbox{\hyperlink{programme_8c_a692ac502636ddbdc217f504d51ecb376}{pos\+X\+\_\+pomme}} = -\/1
+\begin{DoxyCompactList}\small\item\em Position de la pomme. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{programme_8c_af08763c892a2224a990b7c4f2f1f38b5}{pos\+Y\+\_\+pomme}} = -\/1
+\item 
+const int \mbox{\hyperlink{programme_8c_a1c63a2a2d9839ad565ffb2d561262e84}{STARTSAFEZONEX}} = 22
+\item 
+const int \mbox{\hyperlink{programme_8c_acd2007da2b2362394ee67a3de9e31acf}{STARTSAFEZONEY}} = 12
+\item 
+const int \mbox{\hyperlink{programme_8c_a7846ac6df23eae1ff3bf9c3e3baf1a24}{TAILLEPAVE}} = 5
+\item 
+const int \mbox{\hyperlink{programme_8c_ab50989755cf84c2867701dd9f4bdfcdc}{TAILLESERPENT}} = 10
+\item 
+int \mbox{\hyperlink{programme_8c_af6895beba4e254e6f9d13e4b6d4f2197}{taille\+Serpent}} = \mbox{\hyperlink{programme_8c_ab50989755cf84c2867701dd9f4bdfcdc}{TAILLESERPENT}}
+\begin{DoxyCompactList}\small\item\em Variables globales modifiables en cours de jeu. \end{DoxyCompactList}\item 
+const int \mbox{\hyperlink{programme_8c_ae256c08ad85bc3794cfa215ec74190a5}{TEMPORISATION}} = 200000
+\item 
+int \mbox{\hyperlink{programme_8c_aa9bf500100bc38fc935ba1c436899c93}{temporisation}} = \mbox{\hyperlink{programme_8c_ae256c08ad85bc3794cfa215ec74190a5}{TEMPORISATION}}
+\item 
+const char \mbox{\hyperlink{programme_8c_a835cf4156291cebe8b544aa4451a0f49}{TETE}} = \textquotesingle{}O\textquotesingle{}
+\item 
+const char \mbox{\hyperlink{programme_8c_a65e70a095fdc823063b2d115d50a391f}{VIDE}} = \textquotesingle{} \textquotesingle{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Documentation des macros}
+\mbox{\Hypertarget{programme_8c_a82896ec76adf53723dc24e8937bc92f7}\label{programme_8c_a82896ec76adf53723dc24e8937bc92f7}} 
+\index{programme.c@{programme.c}!HAUTEURMAX@{HAUTEURMAX}}
+\index{HAUTEURMAX@{HAUTEURMAX}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{HAUTEURMAX}{HAUTEURMAX}}
+{\footnotesize\ttfamily \#define HAUTEURMAX~40}
+
+Hauteur maximale du plateau de jeu. \mbox{\Hypertarget{programme_8c_a12c7d2450de7cfa8e4733aec7854ec6c}\label{programme_8c_a12c7d2450de7cfa8e4733aec7854ec6c}} 
+\index{programme.c@{programme.c}!LARGEURMAX@{LARGEURMAX}}
+\index{LARGEURMAX@{LARGEURMAX}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{LARGEURMAX}{LARGEURMAX}}
+{\footnotesize\ttfamily \#define LARGEURMAX~80}
+
+
+
+Définition des constantes. 
+
+Largeur maximale du plateau de jeu. \mbox{\Hypertarget{programme_8c_ad796af4c153135b8169af42d8c9ba80e}\label{programme_8c_ad796af4c153135b8169af42d8c9ba80e}} 
+\index{programme.c@{programme.c}!MAXTAILLESERPENT@{MAXTAILLESERPENT}}
+\index{MAXTAILLESERPENT@{MAXTAILLESERPENT}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{MAXTAILLESERPENT}{MAXTAILLESERPENT}}
+{\footnotesize\ttfamily \#define MAXTAILLESERPENT~100}
+
+Taille maximale que le serpent peut atteindre. 
+
+\doxysubsection{Documentation des fonctions}
+\mbox{\Hypertarget{programme_8c_acba1573a94ed488d9e14fdaaf32d9bc4}\label{programme_8c_acba1573a94ed488d9e14fdaaf32d9bc4}} 
+\index{programme.c@{programme.c}!afficher@{afficher}}
+\index{afficher@{afficher}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{afficher()}{afficher()}}
+{\footnotesize\ttfamily void afficher (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y,  }\item[{char}]{c }\end{DoxyParamCaption})}
+
+
+
+Affiche un caractère à une position donnée sur le terminal. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em x} & Coordonnée en X. \\
+\hline
+{\em y} & Coordonnée en Y. \\
+\hline
+{\em c} & Caractère à afficher. \\
+\hline
+\end{DoxyParams}
+Sep placer aux coordonées x,y du terminal puis écrire le caractère voulu à la bonne position\mbox{\Hypertarget{programme_8c_a70488e1d20e26e127d98a583dc05fbda}\label{programme_8c_a70488e1d20e26e127d98a583dc05fbda}} 
+\index{programme.c@{programme.c}!ajouterPomme@{ajouterPomme}}
+\index{ajouterPomme@{ajouterPomme}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{ajouterPomme()}{ajouterPomme()}}
+{\footnotesize\ttfamily void ajouter\+Pomme (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Place une pomme sur une case vide aléatoire. 
+
+génère aléatoirement une coordonnée X
+
+génère aléatoirment une coordonnées Y
+
+place la pomme si les coordonnées sont valides\mbox{\Hypertarget{programme_8c_a6fb5b246fe575a4274bb26dd4fcab9c1}\label{programme_8c_a6fb5b246fe575a4274bb26dd4fcab9c1}} 
+\index{programme.c@{programme.c}!dessinerPlateau@{dessinerPlateau}}
+\index{dessinerPlateau@{dessinerPlateau}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{dessinerPlateau()}{dessinerPlateau()}}
+{\footnotesize\ttfamily void dessiner\+Plateau (\begin{DoxyParamCaption}\item[{int}]{lesX\mbox{[}$\,$\mbox{]},  }\item[{int}]{lesY\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Dessine le plateau entier avec le serpent et les obstacles. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em lesX} & Tableau des coordonnées x du serpent. \\
+\hline
+{\em lesY} & Tableau des coordonnées y du serpent. \\
+\hline
+\end{DoxyParams}
+affiche le serpent dans le terminal
+
+affiche le plateau déja initialisé dans le terminal de jeu\mbox{\Hypertarget{programme_8c_a61de8c71dbb95a7120f58064957f9aec}\label{programme_8c_a61de8c71dbb95a7120f58064957f9aec}} 
+\index{programme.c@{programme.c}!disableEcho@{disableEcho}}
+\index{disableEcho@{disableEcho}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{disableEcho()}{disableEcho()}}
+{\footnotesize\ttfamily void disable\+Echo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\char`\"{}désactive l\textquotesingle{}echo\char`\"{} les caractère tapés au clavier ne s\textquotesingle{}affiche plus dans le terminal. 
+
+\mbox{\Hypertarget{programme_8c_a4c792a17eb955a9e0fa6a033d335fc49}\label{programme_8c_a4c792a17eb955a9e0fa6a033d335fc49}} 
+\index{programme.c@{programme.c}!effacer@{effacer}}
+\index{effacer@{effacer}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{effacer()}{effacer()}}
+{\footnotesize\ttfamily void effacer (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+
+
+Efface un caractère à une position donnée sur le terminal. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em x} & Coordonnée en X. \\
+\hline
+{\em y} & Coordonnée en Y. \\
+\hline
+\end{DoxyParams}
+remplace le caractère present aux coordonnées x,y par du vide\mbox{\Hypertarget{programme_8c_a2c742eced1c8bd5f0f6d42b13cacc651}\label{programme_8c_a2c742eced1c8bd5f0f6d42b13cacc651}} 
+\index{programme.c@{programme.c}!enableEcho@{enableEcho}}
+\index{enableEcho@{enableEcho}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{enableEcho()}{enableEcho()}}
+{\footnotesize\ttfamily void enable\+Echo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\char`\"{}désactive l\textquotesingle{}echo\char`\"{} les caractère tapés au clavier ne s\textquotesingle{}affiche plus dans le terminal. 
+
+\mbox{\Hypertarget{programme_8c_aa294b49bfcc17cf4b490fb020e359851}\label{programme_8c_aa294b49bfcc17cf4b490fb020e359851}} 
+\index{programme.c@{programme.c}!gotoXY@{gotoXY}}
+\index{gotoXY@{gotoXY}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{gotoXY()}{gotoXY()}}
+{\footnotesize\ttfamily void goto\+XY (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+
+
+permet de se déplacer dans le terminal aux coordonnées entréee en paramètre 
+
+\mbox{\Hypertarget{programme_8c_aa25d21866cf984b531a24441b45ee482}\label{programme_8c_aa25d21866cf984b531a24441b45ee482}} 
+\index{programme.c@{programme.c}!initPlateau@{initPlateau}}
+\index{initPlateau@{initPlateau}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{initPlateau()}{initPlateau()}}
+{\footnotesize\ttfamily void init\+Plateau (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Initialise le plateau avec les bordures et les issues. 
+
+Double boucle for permettant de se déplacer sur la bordure du tableau en largeur et en hauteur et afficher la bordure sauf si le curseur est au milieu de la bordure\mbox{\Hypertarget{programme_8c_ad5451da499ab9d3907da8dd7060ab677}\label{programme_8c_ad5451da499ab9d3907da8dd7060ab677}} 
+\index{programme.c@{programme.c}!kbhit@{kbhit}}
+\index{kbhit@{kbhit}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{kbhit()}{kbhit()}}
+{\footnotesize\ttfamily int kbhit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\char`\"{}désactive l\textquotesingle{}echo\char`\"{} les caractère tapés au clavier ne s\textquotesingle{}affiche plus dans le terminal. 
+
+\mbox{\Hypertarget{programme_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{programme_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}} 
+\index{programme.c@{programme.c}!main@{main}}
+\index{main@{main}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Programme principal gérant le déroulement du jeu. 
+
+\begin{DoxyReturn}{Renvoie}
+Code de sortie du programme. 
+\end{DoxyReturn}
+Déclaration des variables
+
+Appel des fonctions pour l\textquotesingle{}affichage du plateau, des pavés et de la première pomme
+
+Boucle principale
+
+gestion des modification lorqu\textquotesingle{}une pomme est mangée
+
+Phrase de fin de jeu en fonction de l\textquotesingle{}issue de la partie
+
+si collision
+
+si victoire
+
+si appui sur la touche de fin\mbox{\Hypertarget{programme_8c_af7e104bcf76235784e38223388eea411}\label{programme_8c_af7e104bcf76235784e38223388eea411}} 
+\index{programme.c@{programme.c}!placerPaves@{placerPaves}}
+\index{placerPaves@{placerPaves}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{placerPaves()}{placerPaves()}}
+{\footnotesize\ttfamily void placer\+Paves (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Place des pavés d\textquotesingle{}obstacles sur le plateau en dehors de la zone de sécurité. 
+
+génère aléatoirement une coordonnée X
+
+génère aléatoirement une coordonnées Y
+
+vérifie que le pavé ne va pas chevaucher le serpent
+
+place le pavé si les coordonnées sont valide\mbox{\Hypertarget{programme_8c_a45b618a45f845ce7e1074a55638cab9f}\label{programme_8c_a45b618a45f845ce7e1074a55638cab9f}} 
+\index{programme.c@{programme.c}!progresser@{progresser}}
+\index{progresser@{progresser}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{progresser()}{progresser()}}
+{\footnotesize\ttfamily void progresser (\begin{DoxyParamCaption}\item[{int}]{lesX\mbox{[}$\,$\mbox{]},  }\item[{int}]{lesY\mbox{[}$\,$\mbox{]},  }\item[{char}]{direction,  }\item[{bool $\ast$}]{collision,  }\item[{bool $\ast$}]{pomme\+Mangee }\end{DoxyParamCaption})}
+
+
+
+Fait progresser le serpent d\textquotesingle{}une étape. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em lesX} & Tableau des coordonnées X du serpent. \\
+\hline
+{\em lesY} & Tableau des coordonnées Y du serpent. \\
+\hline
+{\em direction} & Direction actuelle du serpent. \\
+\hline
+{\em collision} & Indique si une collision a été détectée. \\
+\hline
+{\em pomme\+Mangee} & Indique si une pomme a été mangée. \\
+\hline
+\end{DoxyParams}
+effacer le dernier segment du seprent pour monter qu\textquotesingle{}il avance
+
+change la coordonnée adéquate du seprent en fonction de la direction
+
+gestion de la réapparition du seprent lorsqu\textquotesingle{}il emprunte une issue
+
+Gestion des collisions avec le plateau, les pavés et le corps du serpent
+
+\doxysubsection{Documentation des variables}
+\mbox{\Hypertarget{programme_8c_a0ab0c701c49362998f081779cb5abb5a}\label{programme_8c_a0ab0c701c49362998f081779cb5abb5a}} 
+\index{programme.c@{programme.c}!ARRET@{ARRET}}
+\index{ARRET@{ARRET}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{ARRET}{ARRET}}
+{\footnotesize\ttfamily const char ARRET = \textquotesingle{}a\textquotesingle{}}
+
+Caractère permettant d\textquotesingle{}arrêter le jeu. \mbox{\Hypertarget{programme_8c_ae0985b77c4be035174f1d0f3a0f6aeb0}\label{programme_8c_ae0985b77c4be035174f1d0f3a0f6aeb0}} 
+\index{programme.c@{programme.c}!AUGMENTATIONVITESSE@{AUGMENTATIONVITESSE}}
+\index{AUGMENTATIONVITESSE@{AUGMENTATIONVITESSE}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{AUGMENTATIONVITESSE}{AUGMENTATIONVITESSE}}
+{\footnotesize\ttfamily const int AUGMENTATIONVITESSE = 15000}
+
+Augmentation de la vitesse après avoir mangé une pomme. \mbox{\Hypertarget{programme_8c_af0301ed6bcd9642fe9fa234ee2222f22}\label{programme_8c_af0301ed6bcd9642fe9fa234ee2222f22}} 
+\index{programme.c@{programme.c}!BAS@{BAS}}
+\index{BAS@{BAS}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{BAS}{BAS}}
+{\footnotesize\ttfamily const char BAS = \textquotesingle{}s\textquotesingle{}}
+
+Direction \+: bas. \mbox{\Hypertarget{programme_8c_aefd89b3c50a75561ba19f87fdd066307}\label{programme_8c_aefd89b3c50a75561ba19f87fdd066307}} 
+\index{programme.c@{programme.c}!CARBORDURE@{CARBORDURE}}
+\index{CARBORDURE@{CARBORDURE}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{CARBORDURE}{CARBORDURE}}
+{\footnotesize\ttfamily const char CARBORDURE = \textquotesingle{}\#\textquotesingle{}}
+
+Caractère représentant une bordure ou un obstacle. \mbox{\Hypertarget{programme_8c_a98a86cba00e385e0a5698a45f97a75de}\label{programme_8c_a98a86cba00e385e0a5698a45f97a75de}} 
+\index{programme.c@{programme.c}!COORDMIN@{COORDMIN}}
+\index{COORDMIN@{COORDMIN}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{COORDMIN}{COORDMIN}}
+{\footnotesize\ttfamily const int COORDMIN = 1}
+
+Coordonnée minimale utilisée sur le plateau. \mbox{\Hypertarget{programme_8c_a57b100261ceb92ddf3347cecf84dff0c}\label{programme_8c_a57b100261ceb92ddf3347cecf84dff0c}} 
+\index{programme.c@{programme.c}!COORDXDEPART@{COORDXDEPART}}
+\index{COORDXDEPART@{COORDXDEPART}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{COORDXDEPART}{COORDXDEPART}}
+{\footnotesize\ttfamily const int COORDXDEPART = 40}
+
+Coordonnée X de départ du serpent. \mbox{\Hypertarget{programme_8c_a42704ca6f2bd302a67ac16bc96b39349}\label{programme_8c_a42704ca6f2bd302a67ac16bc96b39349}} 
+\index{programme.c@{programme.c}!COORDYDEPART@{COORDYDEPART}}
+\index{COORDYDEPART@{COORDYDEPART}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{COORDYDEPART}{COORDYDEPART}}
+{\footnotesize\ttfamily const int COORDYDEPART = 20}
+
+Coordonnée Y de départ du serpent. \mbox{\Hypertarget{programme_8c_adb033a6add57b80ca03364c8b5665528}\label{programme_8c_adb033a6add57b80ca03364c8b5665528}} 
+\index{programme.c@{programme.c}!CORPS@{CORPS}}
+\index{CORPS@{CORPS}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{CORPS}{CORPS}}
+{\footnotesize\ttfamily const char CORPS = \textquotesingle{}X\textquotesingle{}}
+
+Caractère représentant le corps du serpent. \mbox{\Hypertarget{programme_8c_a4438cde4b49ae29752ece8f6d806b139}\label{programme_8c_a4438cde4b49ae29752ece8f6d806b139}} 
+\index{programme.c@{programme.c}!DROITE@{DROITE}}
+\index{DROITE@{DROITE}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{DROITE}{DROITE}}
+{\footnotesize\ttfamily const char DROITE = \textquotesingle{}d\textquotesingle{}}
+
+Direction \+: droite. \mbox{\Hypertarget{programme_8c_aa31680343330331e45461732c7ba36fe}\label{programme_8c_aa31680343330331e45461732c7ba36fe}} 
+\index{programme.c@{programme.c}!ENDSAFEZONEX@{ENDSAFEZONEX}}
+\index{ENDSAFEZONEX@{ENDSAFEZONEX}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{ENDSAFEZONEX}{ENDSAFEZONEX}}
+{\footnotesize\ttfamily const int ENDSAFEZONEX = 43}
+
+Fin de la zone de sécurité en X. \mbox{\Hypertarget{programme_8c_a86e258cafebb6532c91474922faac7e8}\label{programme_8c_a86e258cafebb6532c91474922faac7e8}} 
+\index{programme.c@{programme.c}!ENDSAFEZONEY@{ENDSAFEZONEY}}
+\index{ENDSAFEZONEY@{ENDSAFEZONEY}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{ENDSAFEZONEY}{ENDSAFEZONEY}}
+{\footnotesize\ttfamily const int ENDSAFEZONEY = 23}
+
+Fin de la zone de sécurité en Y. \mbox{\Hypertarget{programme_8c_a88837b038b902b50afd93b98b0a36212}\label{programme_8c_a88837b038b902b50afd93b98b0a36212}} 
+\index{programme.c@{programme.c}!GAUCHE@{GAUCHE}}
+\index{GAUCHE@{GAUCHE}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{GAUCHE}{GAUCHE}}
+{\footnotesize\ttfamily const char GAUCHE = \textquotesingle{}q\textquotesingle{}}
+
+Direction \+: gauche. \mbox{\Hypertarget{programme_8c_ad78c1a50d521d4395c404146ded8d3fe}\label{programme_8c_ad78c1a50d521d4395c404146ded8d3fe}} 
+\index{programme.c@{programme.c}!HAUT@{HAUT}}
+\index{HAUT@{HAUT}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{HAUT}{HAUT}}
+{\footnotesize\ttfamily const char HAUT = \textquotesingle{}z\textquotesingle{}}
+
+Direction \+: haut. \mbox{\Hypertarget{programme_8c_aabe228a0e49b0ba57e59d002dbb2821c}\label{programme_8c_aabe228a0e49b0ba57e59d002dbb2821c}} 
+\index{programme.c@{programme.c}!NBREPAVE@{NBREPAVE}}
+\index{NBREPAVE@{NBREPAVE}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{NBREPAVE}{NBREPAVE}}
+{\footnotesize\ttfamily const int NBREPAVE = 4}
+
+Nombre de pavés d\textquotesingle{}obstacles à placer. \mbox{\Hypertarget{programme_8c_acba221d3b78ee2b17bb14f9f39dd65d9}\label{programme_8c_acba221d3b78ee2b17bb14f9f39dd65d9}} 
+\index{programme.c@{programme.c}!NBREPOMMESFINJEU@{NBREPOMMESFINJEU}}
+\index{NBREPOMMESFINJEU@{NBREPOMMESFINJEU}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{NBREPOMMESFINJEU}{NBREPOMMESFINJEU}}
+{\footnotesize\ttfamily const int NBREPOMMESFINJEU = 10}
+
+Nombre de pommes à manger pour gagner. \mbox{\Hypertarget{programme_8c_a6d47cb290b2a494819a871bc24723b64}\label{programme_8c_a6d47cb290b2a494819a871bc24723b64}} 
+\index{programme.c@{programme.c}!plateau@{plateau}}
+\index{plateau@{plateau}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{plateau}{plateau}}
+{\footnotesize\ttfamily char plateau\mbox{[}\mbox{\hyperlink{programme_8c_a82896ec76adf53723dc24e8937bc92f7}{HAUTEURMAX}}+1\mbox{]}\mbox{[}\mbox{\hyperlink{programme_8c_a12c7d2450de7cfa8e4733aec7854ec6c}{LARGEURMAX}}+1\mbox{]}}
+
+
+
+Plateau de jeu. 
+
+\mbox{\Hypertarget{programme_8c_a7bc4f7687fd1383548b7330e2873a810}\label{programme_8c_a7bc4f7687fd1383548b7330e2873a810}} 
+\index{programme.c@{programme.c}!POMME@{POMME}}
+\index{POMME@{POMME}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{POMME}{POMME}}
+{\footnotesize\ttfamily const char POMME = \textquotesingle{}6\textquotesingle{}}
+
+Caractère représentant une pomme. \mbox{\Hypertarget{programme_8c_a692ac502636ddbdc217f504d51ecb376}\label{programme_8c_a692ac502636ddbdc217f504d51ecb376}} 
+\index{programme.c@{programme.c}!posX\_pomme@{posX\_pomme}}
+\index{posX\_pomme@{posX\_pomme}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{posX\_pomme}{posX\_pomme}}
+{\footnotesize\ttfamily int pos\+X\+\_\+pomme = -\/1}
+
+
+
+Position de la pomme. 
+
+\mbox{\Hypertarget{programme_8c_af08763c892a2224a990b7c4f2f1f38b5}\label{programme_8c_af08763c892a2224a990b7c4f2f1f38b5}} 
+\index{programme.c@{programme.c}!posY\_pomme@{posY\_pomme}}
+\index{posY\_pomme@{posY\_pomme}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{posY\_pomme}{posY\_pomme}}
+{\footnotesize\ttfamily int pos\+Y\+\_\+pomme = -\/1}
+
+\mbox{\Hypertarget{programme_8c_a1c63a2a2d9839ad565ffb2d561262e84}\label{programme_8c_a1c63a2a2d9839ad565ffb2d561262e84}} 
+\index{programme.c@{programme.c}!STARTSAFEZONEX@{STARTSAFEZONEX}}
+\index{STARTSAFEZONEX@{STARTSAFEZONEX}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{STARTSAFEZONEX}{STARTSAFEZONEX}}
+{\footnotesize\ttfamily const int STARTSAFEZONEX = 22}
+
+Début de la zone de sécurité en X. \mbox{\Hypertarget{programme_8c_acd2007da2b2362394ee67a3de9e31acf}\label{programme_8c_acd2007da2b2362394ee67a3de9e31acf}} 
+\index{programme.c@{programme.c}!STARTSAFEZONEY@{STARTSAFEZONEY}}
+\index{STARTSAFEZONEY@{STARTSAFEZONEY}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{STARTSAFEZONEY}{STARTSAFEZONEY}}
+{\footnotesize\ttfamily const int STARTSAFEZONEY = 12}
+
+Début de la zone de sécurité en Y. \mbox{\Hypertarget{programme_8c_a7846ac6df23eae1ff3bf9c3e3baf1a24}\label{programme_8c_a7846ac6df23eae1ff3bf9c3e3baf1a24}} 
+\index{programme.c@{programme.c}!TAILLEPAVE@{TAILLEPAVE}}
+\index{TAILLEPAVE@{TAILLEPAVE}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{TAILLEPAVE}{TAILLEPAVE}}
+{\footnotesize\ttfamily const int TAILLEPAVE = 5}
+
+Taille d\textquotesingle{}un pavé d\textquotesingle{}obstacle. \mbox{\Hypertarget{programme_8c_ab50989755cf84c2867701dd9f4bdfcdc}\label{programme_8c_ab50989755cf84c2867701dd9f4bdfcdc}} 
+\index{programme.c@{programme.c}!TAILLESERPENT@{TAILLESERPENT}}
+\index{TAILLESERPENT@{TAILLESERPENT}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{TAILLESERPENT}{TAILLESERPENT}}
+{\footnotesize\ttfamily const int TAILLESERPENT = 10}
+
+Taille initiale du serpent. \mbox{\Hypertarget{programme_8c_af6895beba4e254e6f9d13e4b6d4f2197}\label{programme_8c_af6895beba4e254e6f9d13e4b6d4f2197}} 
+\index{programme.c@{programme.c}!tailleSerpent@{tailleSerpent}}
+\index{tailleSerpent@{tailleSerpent}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{tailleSerpent}{tailleSerpent}}
+{\footnotesize\ttfamily int taille\+Serpent = \mbox{\hyperlink{programme_8c_ab50989755cf84c2867701dd9f4bdfcdc}{TAILLESERPENT}}}
+
+
+
+Variables globales modifiables en cours de jeu. 
+
+\mbox{\Hypertarget{programme_8c_ae256c08ad85bc3794cfa215ec74190a5}\label{programme_8c_ae256c08ad85bc3794cfa215ec74190a5}} 
+\index{programme.c@{programme.c}!TEMPORISATION@{TEMPORISATION}}
+\index{TEMPORISATION@{TEMPORISATION}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{TEMPORISATION}{TEMPORISATION}}
+{\footnotesize\ttfamily const int TEMPORISATION = 200000}
+
+Temps de pause entre deux déplacements \mbox{\Hypertarget{programme_8c_aa9bf500100bc38fc935ba1c436899c93}\label{programme_8c_aa9bf500100bc38fc935ba1c436899c93}} 
+\index{programme.c@{programme.c}!temporisation@{temporisation}}
+\index{temporisation@{temporisation}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{temporisation}{temporisation}}
+{\footnotesize\ttfamily int temporisation = \mbox{\hyperlink{programme_8c_ae256c08ad85bc3794cfa215ec74190a5}{TEMPORISATION}}}
+
+\mbox{\Hypertarget{programme_8c_a835cf4156291cebe8b544aa4451a0f49}\label{programme_8c_a835cf4156291cebe8b544aa4451a0f49}} 
+\index{programme.c@{programme.c}!TETE@{TETE}}
+\index{TETE@{TETE}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{TETE}{TETE}}
+{\footnotesize\ttfamily const char TETE = \textquotesingle{}O\textquotesingle{}}
+
+Caractère représentant la tête du serpent. \mbox{\Hypertarget{programme_8c_a65e70a095fdc823063b2d115d50a391f}\label{programme_8c_a65e70a095fdc823063b2d115d50a391f}} 
+\index{programme.c@{programme.c}!VIDE@{VIDE}}
+\index{VIDE@{VIDE}!programme.c@{programme.c}}
+\doxysubsubsection{\texorpdfstring{VIDE}{VIDE}}
+{\footnotesize\ttfamily const char VIDE = \textquotesingle{} \textquotesingle{}}
+
+Caractère représentant une case vide. 
